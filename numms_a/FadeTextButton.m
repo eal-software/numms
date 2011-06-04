@@ -1,9 +1,10 @@
 
 // Copyright (c) 2011 Ethan Levien
+
 #import "FadeTextButton.h"
 
 
-// BUG: doesn't fade out when unselected
+// BUG: doesn't fade out when unselected if no scene transition
 
 @implementation FadeTextButton
 

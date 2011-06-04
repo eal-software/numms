@@ -1,4 +1,5 @@
 // Copyright (c) 2011 Ethan Levien
+// cocos2d template made this file
 
 #ifndef __GAME_CONFIG_H
 #define __GAME_CONFIG_H

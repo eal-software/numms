@@ -1,5 +1,6 @@
 
 // Copyright (c) 2011 Ethan Levien
+// cocos2d template made this file edited by me
 
 #import "cocos2d.h"
 
@@ -15,9 +16,7 @@
 - (void) removeStartupFlicker
 {
 	//
-	// THIS CODE REMOVES THE STARTUP FLICKER
-	//
-	// Uncomment the following code if you Application only supports landscape mode
+
 	//
 #if GAME_AUTOROTATION == kGameAutorotationUIViewController
 

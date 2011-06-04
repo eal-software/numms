@@ -103,14 +103,13 @@
 
 // ----------------------------------------------------
 -(void) goBack:(CCMenuItemLabel  *) menuItem {
-    [self saveStats];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
 } // end goBack
 
 // ----------------------------------------------------
 -(void) gameEnd{
     [self saveStats];
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[StatsScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:[StatsScene scene]];
 } // end gameEnd
 
 

@@ -1,235 +1,251 @@
 
 
 // Copyright (c) 2011 Ethan Levien
+// StatsScene.mm
 
 #import "StatsScene.h"
 
 
 @implementation StatsScene
 
+#define STATS_HEIGHT 430
+
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
 
 // ----------------------------------------------------
 +(id) scene
 {
-	// 'scene' is an autorelease object.
+    
 	CCScene *scene = [CCScene node];
-	
-	// 'layer' is an autorelease object.
 	StatsScene *layer = [StatsScene node];
-	
-	// add layer as a child to scene
 	[scene addChild: layer];
-	
-	// return the scene
 	return scene;
+    
 } // end scene
 
 
 // ----------------------------------------------------
 -(id) init
 {
-	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super  init])) {
         
-        
-        CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_scores1.png"];
-        backsprite.opacity = 225;
-		backsprite.anchorPoint = ccp(0,0);
-		backsprite.position = ccp(0,0);
-        [self addChild:backsprite];
-        
-        
-        CCLabelTTF *levelsLbl = [CCLabelTTF 
-                                 labelWithString:[NSString stringWithString:@"Level "]
-                                 dimensions:CGSizeMake(100,15) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        levelsLbl.anchorPoint = ccp(0,0);
-        levelsLbl.position = ccp(80,405);
-        
-        CCLabelTTF *sumsLbl = [CCLabelTTF 
-                                 labelWithString:[NSString stringWithString:@"Sum "]
-                                 dimensions:CGSizeMake(100,15) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        sumsLbl.anchorPoint = ccp(0,0);
-        sumsLbl.position = ccp(150,405);
-        
-        CCLabelTTF *bonusLbl = [CCLabelTTF 
-                               labelWithString:[NSString stringWithString:@"Bonus "]
-                               dimensions:CGSizeMake(100,15) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        bonusLbl.anchorPoint = ccp(0,0);
-        bonusLbl.position = ccp(220,405);
+       // CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_motifs1.png"];
+	   // [self addChild:backsprite];
+       // [self buttonSetup];
+       // backsprite.anchorPoint = ccp(0,0);
+       // backsprite.position = ccp(0,0);
 
-        
-        levels = [CCLabelTTF 
-                     labelWithString:[NSString stringWithString:@""]
-                  dimensions:CGSizeMake(40,395) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        levels.anchorPoint = ccp(0,0);
-        levels.position = ccp(80,0);
-
-        sums = [CCLabelTTF 
-                     labelWithString:[NSString stringWithString:@""]
-                dimensions:CGSizeMake(40,395) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        sums.anchorPoint = ccp(0,0);
-        sums.position = ccp(150,0);
-        
-        
-        bonuses = [CCLabelTTF 
-                  labelWithString:[NSString stringWithString:@""]
-                  dimensions:CGSizeMake(40,395) alignment:UITextAlignmentLeft fontName:STATS_FONT fontSize:15];
-        bonuses.anchorPoint = ccp(0,0);
-        bonuses.position = ccp(220,0);
-        
-        [self addChild: levelsLbl];
-        [self addChild: sumsLbl];
-        [self addChild: bonusLbl];
-        [self addChild: levels];
-        [self addChild: sums];
-        [self addChild: bonuses];
-        [self menuSetup];
-        [self displayStats:[self readStats]];
+        DataIOManager *io = [DataIOManager dataIOManager];
+        [self labelsSetup];
+        [self buttonSetup];
+        [self displayStats:[io readStats]];
 	}
 	return self;
-}
+} // end init
 
 
 // ---------------------------------------------------
--(void) menuSetup{
-   // CCDirector *director = [CCDirector sharedDirector];
-    
-    // setup back button        
+-(void) buttonSetup{
 
-    CCLabelTTF *backLabel = [CCLabelTTF labelWithString:@"Back" fontName:MENU_FONT fontSize:20];
-    backLabel.opacity = 225;
-    FadeTextButton  *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
-    [backLabel setAnchorPoint:CGPointMake(0, 0)];
-    [backLabel setPosition:ccp(0,0)];
-    [back setAnchorPoint:CGPointMake(0, 0)];
-    [back setPosition:ccp(100, 100)];   
-    [back setOpacity:100];
+    // two buttons:
+    // back
+    CCLabelTTF *backLabel = [CCLabelTTF labelWithString:BACK_TEXT fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    backLabel.opacity = BUTTON_OPACITY;
+    backLabel.color = ccc3(225, 225, 225);
+    FadeTextButton *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
+    back.anchorPoint = ccp(0,0);
+    back.position = ccp(0,0);
+
+    // reset
+    CCLabelTTF *resetLabel = [CCLabelTTF labelWithString:@"Reset" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    resetLabel.opacity = BUTTON_OPACITY;
+    resetLabel.color = ccc3(225, 225, 225);
+    FadeTextButton *reset = [FadeTextButton  itemWithLabel: resetLabel target:self  selector: @selector(resetData:)];
+    reset.anchorPoint = ccp(0,0);
+    reset.position = ccp(0,0);
     
-    CCLabelTTF *resetLabel = [CCLabelTTF labelWithString:@"Reset" fontName:MENU_FONT fontSize:20];
-    resetLabel.opacity = 225;
-    FadeTextButton  *reset = [FadeTextButton itemWithLabel: resetLabel  target:self  selector: @selector(resetData:)];
-       [resetLabel setAnchorPoint:CGPointMake(0, 0)];
-    [resetLabel setPosition:ccp(0,0)];
-    [reset setAnchorPoint:CGPointMake(0, 0)];
-    [reset setPosition:ccp(100, 300)];
-    [reset setOpacity:100];
-    
-    CCMenu *menu = [CCMenu menuWithItems:back, reset,nil];
-    [menu setAnchorPoint:ccp(0,0)];
-    [menu setPosition:ccp(60,15)];        
+    // add to menu and as child to scene
+    CCMenu *menu = [CCMenu menuWithItems: back, reset,nil];
+    //[menu setAnchorPoint:ccp(0,0)];
+    [menu setPosition:ccp(120,15)];        
     [menu alignItemsHorizontally];
     
     [self addChild:menu];
 
 } // end menuSetup
 
+
+
+// ---------------------------------------------------
+-(void) labelsSetup{
+    
+    // three labels
+    
+    // levels
+    CCLabelTTF *levelsLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithString:@"Level "]
+                             dimensions:CGSizeMake(100,15) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    levelsLbl.anchorPoint = ccp(0,0);
+    levelsLbl.position = ccp(50,STATS_HEIGHT+STATS_DISP_SIZE);
+    
+    // sums
+    CCLabelTTF *sumsLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithString:@"  Score "]
+                           dimensions:CGSizeMake(100,15) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    sumsLbl.anchorPoint = ccp(0,0);
+    sumsLbl.position = ccp(150,STATS_HEIGHT+STATS_DISP_SIZE);
+    
+    // bonuses
+    CCLabelTTF *bonusLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithString:@"Bonus "]
+                            dimensions:CGSizeMake(100,15) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    bonusLbl.anchorPoint = ccp(0,0);
+    bonusLbl.position = ccp(240,STATS_HEIGHT+STATS_DISP_SIZE);
+    
+    // add labels
+    [self addChild: levelsLbl];
+    [self addChild: sumsLbl];
+    [self addChild: bonusLbl];
+    
+} // end labelsSetup
+
+
+#pragma mark - 
+#pragma mark button_selectors
+
+// button_selectors
+// ====================================================
+
 // ---------------------------------------------------
 -(void) resetData:(CCMenuItemLabel  *) menuItem{
     
-   
-    // get array of data
-    NSString *err = nil;
-    NSPropertyListFormat format;
-    NSString *dataPath;
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                            NSUserDomainMask, YES) objectAtIndex:0];
-    
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
-        
-    }    
-    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
-    NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
-                                          propertyListFromData:plistXML
-                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                          format:&format
-                                          errorDescription:&err];
-    
-    NSMutableArray *dataArr = [NSMutableArray arrayWithArray:[temp objectForKey:@"Scores"]];   
-   
-    // empty array
-    [dataArr removeAllObjects];
-    
-    // serialize and write empty array to statsData file
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    NSDictionary *plistDict = [NSDictionary dictionaryWithObject:
-                               [NSArray arrayWithArray:dataArr]
-                                                          forKey:@"Scores"];
-    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:plistDict
-                                                                   format:NSPropertyListXMLFormat_v1_0
-                                                         errorDescription:&err];
-    
-    if (![plistData writeToFile:dataPath atomically:YES]) {
-        // error
-    }
-    
-    [self displayStats: [self readStats]];
-    
+    DataIOManager *io = [DataIOManager dataIOManager];
+    [self clearLabels];
+    NSMutableArray* data = [io readStats];
+    [data removeAllObjects];
+    [io writeStats:data];
+    NSMutableArray *newData = [io readStats];
+    [self displayStats:newData];
+
 } // end resetData
+
+
 
 // ---------------------------------------------------
 -(void) goBack:(CCMenuItemLabel  *) menuItem {
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
+    
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
+    
 } // end goBack
 
+
+#pragma mark - 
+#pragma mark display
+
+// display
+// ====================================================
+
+// ----------------------------------------------------
+-(void) clearLabels{
+    
+    // remove the old labels
+    for (int i = 0; i < 21; i++) {
+        if (scores[i][0] != 0) {
+            [self removeChild:scores[i][0] cleanup:YES];
+        }
+        if (scores[i][1] != 0) {
+            [self removeChild:scores[i][1] cleanup:YES];
+        }
+        if (scores[i][2] != 0) {
+            [self removeChild:scores[i][2] cleanup:YES];
+        }
+    }
+    
+} // end clearLabels
+
 // ---------------------------------------------------
--(void) displayStats:(NSArray*) data{
-   NSString *levelsStr = [NSString stringWithString:@""];
-   NSString *sumsStr = [NSString stringWithString:@""];
-   NSString *bonusesStr = [NSString stringWithString:@""];
+-(void) displayStats:(NSMutableArray*) data{
+    
     
     int i = 0;
-    while ((i < [data count] ) && (i < 21 )) {
+    while (i < [data count] ) {
         
         // get score object from nsdata
         Score *temp = [NSKeyedUnarchiver unarchiveObjectWithData:[data objectAtIndex:i]];
         
-        // update string
-        levelsStr = [levelsStr stringByAppendingString:
-                     [NSString stringWithFormat:@" %d                    ", [temp level]]];  
-        sumsStr = [sumsStr stringByAppendingString: 
-                   [NSString stringWithFormat:@" %d                    ", [temp sum]]]; 
-        bonusesStr = [bonusesStr stringByAppendingString: 
-                      [NSString stringWithFormat:@" %d                      ", [temp bonus]]]; 
-
+        // level lbl
+        scores[i][0] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
+                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
+                                          fontSize:STATS_DISP_SIZE];
+        scores[i][0].anchorPoint = ccp(0,0);
+        scores[i][0].position = ccp(50,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        
+        [scores[i][0] setString: [NSString stringWithFormat:@" %d", [temp level]]];
+        
+        [self addChild:scores[i][0]];
+        
+        // sum
+        scores[i][1] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
+                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
+                                          fontSize:STATS_DISP_SIZE];
+        scores[i][1].anchorPoint = ccp(0,0);
+        scores[i][1].position = ccp(150,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        
+        [scores[i][1] setString: [NSString stringWithFormat:@" %d", [temp sum]]];
+        
+        [self addChild:scores[i][1]];
+        
+        // bonus
+        scores[i][2] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
+                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
+                                          fontSize:STATS_DISP_SIZE];
+        scores[i][2].anchorPoint = ccp(0,0);
+        scores[i][2].position = ccp(240,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        
+        [scores[i][2] setString: [NSString stringWithFormat:@"   %d", [temp bonus]]];
+        
+        [self addChild:scores[i][2]];
+        
+        if ([temp history] == 0) {
+            
+            // display this entry as green
+            scores[i][0].color = ccc3(0,225,0);
+            scores[i][1].color = ccc3(0,225,0);
+            scores[i][2].color = ccc3(0,225,0);
+           
+            // increment history on element in array
+            [data replaceObjectAtIndex: i withObject:
+             [NSKeyedArchiver archivedDataWithRootObject:
+              [Score scoreWithLvl:[temp level] Sum:[temp sum] Bonus:[temp bonus] History:1]]];
+        } // end if
         
         i++;
-    }
-    [levels setString:levelsStr];
-    [sums setString:sumsStr];
-    [bonuses setString:bonusesStr];
-} // end displayStats
-
-// ----------------------------------------------------
-
--(NSArray*) readStats{
-    
-    // get array of data
-    NSString *err = nil;
-    NSPropertyListFormat format;
-    NSString *dataPath;
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                              NSUserDomainMask, YES) objectAtIndex:0];
-    
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
         
-    }    
-    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
-    NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
-                                          propertyListFromData:plistXML
-                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                          format:&format
-                                          errorDescription:&err];
+    } // end for
     
-    NSMutableArray *dataArr = [NSMutableArray arrayWithArray:[temp objectForKey:@"Scores"]];    
-    return  dataArr;
-} // end readGreatest
+    
+    // write the updated array to file
+    DataIOManager *io = [DataIOManager dataIOManager];
+    [io writeStats:data];    
+
+    
+} // end displayStats
 
 @end

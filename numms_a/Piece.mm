@@ -1,10 +1,17 @@
 
 // Copyright (c) 2011 Ethan Levien
+// Piece.mm
 
 #import "Piece.h"
 
 
 @implementation Piece
+
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
 
 // ---------------------------------------------------
 -(id) init
@@ -25,21 +32,24 @@
         label.anchorPoint = CGPointMake(0,0);
         label.position = CGPointMake(25,8);
         label.opacity = 225;
-        ///sprite = [CCSprite spriteWithFile:@"piece_a.png"];
 
-        
-
-	
+        	
 	}
 	return self;
 } // end init
 
+#pragma mark - 
+#pragma mark setters
+
+// setters
+// ====================================================
 
 // ---------------------------------------------------
 -(void) setVal: (short) v {
     val = v;
     [label setString:[NSString stringWithFormat:@"%d", val]];
 } // end setVal
+
 
 // ---------------------------------------------------
 -(void) setType: (short) t{
@@ -53,6 +63,8 @@
         [sprite addChild:label];
         
     }else if(type == AI){
+        
+        
         sprite = [CCSprite spriteWithTexture:[[CCTextureCache sharedTextureCache] addImage:@"p_6b.png"]];
         sprite.anchorPoint = CGPointMake(0,0);
         sprite.opacity = 225;
@@ -72,15 +84,23 @@
                                 gp.y*([director winSize].height/(float)GHEIGHT));
 } // end setGp
 
-// ---------------------------------------------------
-// animations
+#pragma mark - 
+#pragma mark animations
 
+// animation
+// ====================================================
+
+// ---------------------------------------------------
 -(void) birth{
     
 } // birth
 
+// ---------------------------------------------------
 -(void) death{
-    // this runs the faceout action on the label
+    
+    
+    //fade out:
+    // this runs the fadeout action on the label
 	// but then calls the second actions selector targeted to self
 	id a1;
 
@@ -91,29 +111,58 @@
     
 } // death
 
+// ---------------------------------------------------
 -(void) capture{
+    
+    [self removeAllChildrenWithCleanup:YES];
+    
+    label = [CCLabelTTF labelWithString:@"1" fontName:PIECE_FONT fontSize:50];
+    label.anchorPoint = CGPointMake(0,0);
+    label.position = CGPointMake(25,8);
+    label.opacity = 225;
+    [self setType:HUMAN];
+    [self setVal:val];
+    
+    // draw floating num
+    NSString *numStr = [NSString stringWithFormat:@"+ %d", val];
+    
+    
+    
+    
+   CCLabelTTF *num = [CCLabelTTF 
+           labelWithString:numStr 
+           dimensions:CGSizeMake(150, 40)
+           alignment: UITextAlignmentLeft
+           fontName:STATS_FONT 
+           fontSize:40];
+    num.opacity = 225;
+    [self addChild:num];
+    
+    num.opacity = 225;
+    num.anchorPoint = ccp(0,0);
+    num.position    = ccp(0,0);
+    num.color = ccc3(180, 180, 180);
+    
+    id a1 = [CCMoveBy  actionWithDuration:1 position:ccp(0,100)];
+    id a2 = [CCFadeOut actionWithDuration:1];
+    
+    [num  runAction:a1];
+    [num  runAction:a2];
     
 } // capture
 
 
-// house keeping ------------------------------------------------------------------------------------------------
+#pragma mark - 
+#pragma mark misc
 
+// misc
+// ====================================================
+
+// ---------------------------------------------------
 -(void) removeFromParentAutoCleanup
 {
 	[self removeFromParentAndCleanup:YES];
 	
 } // removeFromParentAutoCleanup
-
-// on "dealloc" you need to release all your retained objects
-- (void) dealloc
-{
-	// in case you have something to dealloc, do it in this method
-	// in this particular example nothing needs to be released.
-	// cocos2d will automatically release all the children (Label)
-	
-	// don't forget to call "super dealloc"
-	
-	[super dealloc];
-}
 
 @end

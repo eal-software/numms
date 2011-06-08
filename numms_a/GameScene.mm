@@ -1,24 +1,26 @@
 // Copyright (c) 2011 Ethan Levien
+// GameScene.mm
 
 #import "GameScene.h"
 
 
 @implementation GameScene
 
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
+
 // ----------------------------------------------------
 +(id) scene
 {
-	// 'scene' is an autorelease object.
+
 	CCScene *scene = [CCScene node];
-	
-	// 'layer' is an autorelease object.
 	GameScene *layer = [GameScene node];
-	
-	// add layer as a child to scene
 	[scene addChild: layer];
-	
-	// return the scene
 	return scene;
+    
 } // end scene
 
 
@@ -27,39 +29,20 @@
 -(id) init
 {
 	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
-	if( (self=[super  init])) {
-        
-       // CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_grid3.png"];
-		//[self addChild:backsprite];
-       // backsprite.opacity = 225;
-		//backsprite.anchorPoint = ccp(0,0);
-		//backsprite.position = ccp(0,0);
-       
-        // setup back button
-        CCLabelTTF *backLabel = [CCLabelTTF labelWithString:@"Back" fontName:MENU_FONT fontSize:40];
-        backLabel.opacity = 100;
-        FadeTextButton  *back = [FadeTextButton itemWithLabel:backLabel target:self selector:@selector(goBack:)];
-        CCMenu *menu = [CCMenu menuWithItems: back,nil];
-        [backLabel setAnchorPoint:CGPointMake(0, 0)];
-        [backLabel setPosition:ccp(0,0)];
-        [back setAnchorPoint:CGPointMake(0, 0)];
-        [back setPosition:ccp(50,410)];        
-        [menu setAnchorPoint:ccp(0,0)];
-        [menu setPosition:ccp(0,0)];
-        
-        // add
-    
 
-        
+	if( (self=[super  init])) {
+
+                
+        [self buttonSetup];
+       
         board = [Board node];
         hud = [Hud node];
         
         [self addChild:board];
         [self addChild:hud];
-        [self addChild:menu];
+        
         self.isTouchEnabled = YES;
+        
         bonus = 0;
         [self playLevel];
 
@@ -68,24 +51,49 @@
 
 	}
 	return self;
-}
+} // end init
 
-# pragma mark -
-# pragma mark game
+// ----------------------------------------------------
+-(void) buttonSetup{
+    
+    CCDirector *director = [CCDirector sharedDirector];
+    
+    // back
+    CCLabelTTF *backLabel = [CCLabelTTF labelWithString:BACK_TEXT fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    backLabel.opacity = BUTTON_OPACITY;
+    backLabel.color = ccc3(225, 225, 225);
+    FadeTextButton *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
+    back.anchorPoint = ccp(0,0);
+    back.position = ccp([director winSize].width/4*2+35,415);
+    
+    // add to menu and as child
+    CCMenu *menu = [CCMenu menuWithItems: back,nil];
+    [menu setAnchorPoint:ccp(0,0)];
+    [menu setPosition:ccp(0,0)];
+    [self addChild:menu];
+    
+} // end buttonSetup
+
+#pragma mark - 
+#pragma mark game_control
+
+// game_control
+// ====================================================
 
 // ----------------------------------------------------
 -(void) playLevel{
-    lvlTime = 0;
-    goal = [board level]*[board level];
-    [self schedule:@selector(timePlus) interval:0.1];
+    lvlTime = LVL_TIME;
+    goal = 5*[board level] + [board score];
+    [self schedule:@selector(timePlus) interval:LVL_SPEED];
     
 } // end playLevel
 
 // ----------------------------------------------------
 -(void) timePlus{
-    [hud setDispWithScore:[board score] Time:lvlTime Level:goal Bonus:bonus];
-    if (lvlTime < 50) {
-        lvlTime++;
+    
+    [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
+    if (lvlTime >= 0) {
+        lvlTime--;
     }else{
         if ([board score] >= goal) {
             bonus = bonus + ( [board score] - goal );
@@ -98,8 +106,11 @@
     
 } // end timePlus
 
-# pragma mark -
-# pragma mark nav
+#pragma mark - 
+#pragma mark button_selectors/nav
+
+// button_selectors/nav
+// ====================================================
 
 // ----------------------------------------------------
 -(void) goBack:(CCMenuItemLabel  *) menuItem {
@@ -113,81 +124,59 @@
 } // end gameEnd
 
 
-# pragma mark -
-# pragma mark data
+#pragma mark - 
+#pragma mark data
+
+// data
+// ====================================================
 
 // ----------------------------------------------------
 -(void) saveStats{
-    // get array of data
-    NSString *err = nil;
-    NSPropertyListFormat format;
-    NSString *dataPath;
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                              NSUserDomainMask, YES) objectAtIndex:0];
+   
+    DataIOManager *io = [DataIOManager dataIOManager];
     
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
-        
-    }    
-    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
-    NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
-                                          propertyListFromData:plistXML
-                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                          format:&format
-                                          errorDescription:&err];
-    
-    NSMutableArray *dataArr = [NSMutableArray arrayWithArray:[temp objectForKey:@"Scores"]];   
+    NSMutableArray *data = [io readStats];
     
     NSComparator sort = ^(id d1, id d2){
         Score *s1 = [NSKeyedUnarchiver unarchiveObjectWithData:d1];
         Score *s2 = [NSKeyedUnarchiver unarchiveObjectWithData:d2];
         return [[NSNumber numberWithInt:[s2 level]] compare:[NSNumber numberWithInt:[s1 level]]];
     };
-    // empty array
+
+    [data addObject:[NSKeyedArchiver archivedDataWithRootObject:
+                        [Score scoreWithLvl:[board level] Sum:[board score] Bonus:bonus History:0]]];
+    [data sortUsingComparator:sort];
     
-   // Score *lowest = [NSKeyedUnarchiver unarchiveObjectWithData:[dataArr objectAtIndex:([dataArr count]-1)]];
-    //if (([board level] > [lowest level]) || [dataArr count] < 21 ) {
-        [dataArr addObject:[NSKeyedArchiver archivedDataWithRootObject:
-                            [Score scoreWithLvl:goal Sum:[board score] Bonus: bonus]]];
-        [dataArr sortUsingComparator:sort];
-    //}
-        
-    
-    // serialize and write empty array to statsData file
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    NSDictionary *plistDict = [NSDictionary dictionaryWithObject:
-                               [NSArray arrayWithArray:dataArr]
-                                                          forKey:@"Scores"];
-    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:plistDict
-                                                                   format:NSPropertyListXMLFormat_v1_0
-                                                         errorDescription:&err];
-    
-    if (![plistData writeToFile:dataPath atomically:YES]) {
-        // error
+    // remove objects st. array is less then 21 elements
+    while ([data count] > MAX_SCORES) {
+        [data removeLastObject];
     }
+
+    [io writeStats:data];
+   
     
 } // end saveStats
 
 
-// user input ------------------------------------------------------------------------------------------------
 
-# pragma mark -
-# pragma mark input
+#pragma mark - 
+#pragma mark touch
 
-//We need to tell the CCLayer code that we want the “targeted” set of touch events rather than the “standard” set:
+// touch
+// ====================================================
+
+// ----------------------------------------------------
 -(void) registerWithTouchDispatcher
 {
 	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 } // registerWithTouchDispatcher
 
-// Return YES here to tell the touch dispatcher that you want to claim this touch:
+// ----------------------------------------------------
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     return YES;
 } // ccTouchBegan
 
-// move sprite to where touch ends
+// ----------------------------------------------------
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
 	
 	
@@ -205,7 +194,7 @@
         [board displayBoard];
         [board turn];
         [board displayBoard];
-        [hud setDispWithScore:[board score] Time:lvlTime Level:goal Bonus:bonus];
+        [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
     }
 		
     self.isTouchEnabled = YES;

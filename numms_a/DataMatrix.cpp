@@ -1,5 +1,7 @@
 
 // Copyright (c) 2011 Ethan Levien
+// DataMatrix.cpp
+
 
 #include "DataMatrix.h"
 
@@ -9,24 +11,30 @@
 
 // ----------------------------------------------------
 DataMatrix::DataMatrix(){
+    
     srand(time(NULL));
     ai_count = 0;
     resetMatrix();
     s = 0;
-    lvl = 0;
+    lvl = 1;
+    
 } // end ctor
 
 
 // ----------------------------------------------------
-
 bool DataMatrix::placePiece_human(short x,short y){
-    short sum;
-    if ((sum = checkCell_Human(x,y)) != 0) {
+    short sum = checkCell_Human(x, y);
+    if (sum != 0) {
+        bool capture = false;
         if (matrix[x][y].type == AI){
             s = s + sum;
             ai_count--;
-        }
-        insertPiece(x,y, sum, HUMAN);        
+            capture = true;
+        }       
+        insertPiece(x,y, sum, HUMAN);
+        
+        if (capture) matrix[x][y].drawn = CAPTURED;
+        
         return true;
     } else {
         return false;
@@ -35,10 +43,7 @@ bool DataMatrix::placePiece_human(short x,short y){
 } // end placePiece_human
 
 // ----------------------------------------------------
-
 void DataMatrix::turn( void ){
-    
-    
     
     placePiece_AI();
     
@@ -65,12 +70,11 @@ void DataMatrix::turn( void ){
 } // end update
 
 // ----------------------------------------------------
-
 void DataMatrix::resetMatrix( void ){
     for (int i = 0; i < GWIDTH; i++) {
         for (int j = 0; j < GHEIGHT-1; j++) {
             resetPiece(i, j);
-            matrix[i][j].drawn = true;
+            matrix[i][j].drawn = DRAWN;
         } // end for
     } // end for
     
@@ -91,85 +95,29 @@ void DataMatrix::resetMatrix( void ){
 #pragma mark private
 
 // ----------------------------------------------------
-
 void DataMatrix::placePiece_AI( void ){
    
-    ruleSet = RULE_SET_1c;
-    switch (ruleSet) {
-        
-        // RULE SET 1a
-        // ----------------------------------------------------
-        case RULE_SET_1a:
-        { 
-            short x, y, val;
+ 
+    if (ai_count < LIFESPAN) {
+        short x, y, val;
+        x = rand()%GWIDTH;
+        y = rand()%(GHEIGHT-1);
+        val = rand()%9+1;
+        while (matrix[x][y].type != EMPTY) {
             x = rand()%GWIDTH;
             y = rand()%(GHEIGHT-1);
-            val = rand()%9+1;
-            
-            while (matrix[x][y].type != EMPTY) {
-                x = rand()%GWIDTH;
-                y = rand()%(GHEIGHT-1);
-            }
-            
-            insertPiece(x, y, val, AI);
         }
-        break;
-        
-        // RULE SET 1b
-        // ----------------------------------------------------
-        case RULE_SET_1b:
-        { 
-            short x, y, val;
-            
-            // find the first palyer piece to use
-            for (int i = 0; i < GWIDTH; i++) {
-                for (int j = 0; j < GHEIGHT; j++) {
-                    if (matrix[i][j].type == HUMAN) {
-                        x = i;
-                        y = j;
-                    }
-                }
-            }
-    
-            recursive_AiPlay(rand()%LIFESPAN+1, x, y, val);
-            insertPiece(x, y, val, AI);
-        }
-        break;
-       
-        // RULE SET 1c
-        // ----------------------------------------------------
-        case RULE_SET_1c:
-        { 
-            if (ai_count < LIFESPAN) {
-                short x, y, val;
-                x = rand()%GWIDTH;
-                y = rand()%(GHEIGHT-1);
-                val = rand()%9+1;
                 
-                while (matrix[x][y].type != EMPTY) {
-                    x = rand()%GWIDTH;
-                    y = rand()%(GHEIGHT-1);
-                }
-                
-                insertPiece(x, y, val, AI);
-                ai_count++;
-            }
-           
-        }
-        break;
-            
+        insertPiece(x, y, val, AI);
+        ai_count++;
     }
-    
-   //recursive_AiPlay(n,x,y,val);
 
     
 } // end placePiece_AI
 
 // ----------------------------------------------------
-
 void DataMatrix::recursive_AiPlay(short n, short &x,short &y, short &val){
   
-    
     if ( n < 0) {
         val = matrix[x][y].val;
     }else{
@@ -183,13 +131,14 @@ void DataMatrix::recursive_AiPlay(short n, short &x,short &y, short &val){
         // fill lists with (x,y) coords that are okay
         for (int i = x-1; i <= x+1; i++) {
             for (int j = y-1; j <= y+1; j++) {
-                if ( ( i != x || j != y) &&
-                    ( i < GWIDTH && j < GHEIGHT) &&( i >= 0 && j >= 0)) {
+                if (   ( i != x || j != y) &&
+                       ( i < GWIDTH && j < GHEIGHT) &&
+                       ( i >= 0 && j >= 0))  {
                     if(placePiece_human(i, j)){
                         xChecks.push_front(i);
                         yChecks.push_front(j);
                         resetPiece(i, j);
-                        matrix[i][j].drawn = true;
+                        matrix[i][j].drawn = DRAWN;
                     }
                 }else{
                    //bad cell
@@ -223,16 +172,18 @@ void DataMatrix::recursive_AiPlay(short n, short &x,short &y, short &val){
 } // end recursive_AiPlay
 
 // ----------------------------------------------------
-
 short DataMatrix::getSum( short x, short y){
     
     short sum = 0;
     
     for (int i = x-1; i <= x+1; i++) {
         for (int j = y-1; j <= y+1; j++) {
-            if ( ( i != x || j != y) && matrix[i][j].type == HUMAN && 
-                ( i < GWIDTH && j < GHEIGHT) &&( i >= 0 && j >= 0)) {
-                sum = sum + matrix[i][j].val;
+            if (  ( i != x || j != y) &&               // the cell being looked at is not the cell being played on 
+                  ( matrix[i][j].type == HUMAN) &&     // AND contians a human piece        
+                  ( i < GWIDTH && j < GHEIGHT-1) &&      // AND is within upper bounds of grid
+                  ( i >= 0 && j >= 0) )                // AND is within lower bounds of grid
+            {           
+                sum = sum + matrix[i][j].val;          // add the cells value to the sum
             }
         }
     }
@@ -241,18 +192,17 @@ short DataMatrix::getSum( short x, short y){
 } // end getSum
 
 // ----------------------------------------------------
-
 short DataMatrix::checkCell_Human (short x,short y){
     
-    if ( matrix[x][y].type == HUMAN){
-        return 0;
-    } else {
+    if ( matrix[x][y].type == HUMAN){ 
+        return 0;   
+    } else {        
         short val = getSum(x, y);
         if (matrix[x][y].type == AI) {
-            return val >= matrix[x][y].val ? matrix[x][y].val : 0;
+            return ( val >= matrix[x][y].val ) ? matrix[x][y].val : 0;
         }else{
             return val;
-        }
+        }        
     }
 
 } // end checkCell_Human
@@ -263,7 +213,7 @@ void DataMatrix::insertPiece(short x,short y, short val, short type){
     matrix[x][y].val = val;
     matrix[x][y].age = 0;
     matrix[x][y].type = type;
-    matrix[x][y].drawn = false;
+    matrix[x][y].drawn = BORN;
 } // end insertPiece
 
 // ----------------------------------------------------
@@ -271,7 +221,7 @@ void DataMatrix::resetPiece ( short x,short y ){
     matrix[x][y].val = -1;
     matrix[x][y].type = EMPTY;
     matrix[x][y].age = -1;
-    matrix[x][y].drawn = false;
+    matrix[x][y].drawn = DIED;
 } // end resetPiece
 
 

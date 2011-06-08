@@ -1,4 +1,5 @@
 // Copyright (c) 2011 Ethan Levien
+// Piece.h
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
@@ -8,7 +9,10 @@
  Programmer: ethan levien
  
  SUMMARY: 
- todo - cache textures someplace else for better preformance
+ todo - make "ctor" instead of having setters
+      - maybe subclass for different types of pieces
+      - in general re organize code surrounding how piece is captures
+ 
  
  REVISIONS: 
  05/26/2011 (eal) - wrote and implemented class basics
@@ -17,22 +21,33 @@
 
 
 @interface Piece : CCNode {
-    CGPoint gPos;
+    
+    CGPoint gPos; // coords on grid
+    
+    // piece data 
     short val;
     short type;
+    
     CCLabelTTF *label;
 	CCSprite *sprite;
-}
+    
+    
+} // end interface
 
+// setters
+// ====================================================
 -(void) setVal: (short) v;
 -(void) setType: (short) t;
 -(void) setGp: (CGPoint) gp;
 
 // animations
+// ====================================================
 -(void) birth;
 -(void) death;
 -(void) capture;
 
+// misc
+// ====================================================
 // this lets me cleaup as a selector
 -(void) removeFromParentAutoCleanup;
 

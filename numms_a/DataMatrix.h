@@ -1,8 +1,8 @@
 
 // Copyright (c) 2011 Ethan Levien
+// DataMatrix.h
 
 #import "Consts.h"
-#include "GameAI.h"
 #include <stdlib.h>
 #include <list>
 #include <time.h>
@@ -12,15 +12,22 @@ using namespace std;
 /*--------------------------------------------------------------
  Programmer: ethan levien
  
- SUMMARY: Encapsulates the game data
+ SUMMARY: Encapsulates the game data and logic
  
  todo: - implement recurive algorithm for placing ai pieces
        - level design? possibly add more types of pieces?
-       - BUG: ghost pieces (often around the edges) , may be problem w/ board)
+       - rexamine how pieces drawn member is kept track of throught
+         code
  
  REVISIONS: 
  05/27/2011 (eal) - wrote and implemented class basics
  05/28/2011 (eal) - commented
+ 06/07/2011 (eal) - score may or maynot be reset when level is changed
+                    (stil playing with scoring methods)
+                  - ghost piece bug fixed. was using GHEIGHT to check if
+                    cells were in grid inside getSum, but actual size of
+                    board is GHEIGHT - 1
+ 06/08/2011 (eal) - replaced the bool draw with a short and altered code accordingly
  ----------------------------------------------------------------*/
 
 
@@ -28,7 +35,7 @@ struct pieceData {
     short val;
     short type;   // AI, HUMAN, or EMPTY
     short age;    // 0 when created( always before turn)
-    bool  drawn;  // true if piece has been drawn
+    short  drawn;  // true if piece has been drawn
 };
 
 
@@ -60,15 +67,18 @@ public:
     inline short val(short x,short y)  { return matrix[x][y].val;   };
     inline short type(short x,short y) { return matrix[x][y].type;  };
     inline short age(short x,short y)  { return matrix[x][y].age;   };
-    inline bool drawn(short x,short y) { return matrix[x][y].drawn; };
-    inline void drawP(short x,short y) { matrix[x][y].drawn = true; };
+    inline short drawn(short x,short y) { return matrix[x][y].drawn; };
+    inline void drawP(short x,short y) { matrix[x][y].drawn = DRAWN; };
     
     // matrix
     inline short score() {return s;};
     inline short level() {return lvl;};
     
     // set
-    inline void setLevel(short l) { lvl = l; };
+    inline void setLevel(short l) { 
+        lvl = l;
+       // s = 0;
+    };
     
 private:
     

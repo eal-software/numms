@@ -1,120 +1,115 @@
 
 // Copyright (c) 2011 Ethan Levien
+// HelloScene.mm
 
 #import "HelloScene.h"
 
 
 @implementation HelloScene
 
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
 
 // ----------------------------------------------------
 +(id) scene
 {
-	// 'scene' is an autorelease object.
+    
 	CCScene *scene = [CCScene node];
-	
-	// 'layer' is an autorelease object.
 	HelloScene *layer = [HelloScene node];
-	
-	// add layer as a child to scene
 	[scene addChild: layer];
-	
-	// return the scene
 	return scene;
+    
 } // end scene
-
-
 
 // ----------------------------------------------------
 -(id) init
 {
-	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super  init])) {
         
-        CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_hello1.png"];
+        // add background sprite
+        CCSprite* backsprite = [CCSprite spriteWithFile:HELLO_BACKGROUND_SPRITE];
 		[self addChild:backsprite];
 		backsprite.anchorPoint = ccp(0,0);
 		backsprite.position = ccp(0,0);
         
-        
-        [self menuSetup];
+        // setup buttons and enable touch
+        [self buttonSetup];
         self.isTouchEnabled = YES;
 	}
 	return self;
-}
+} // end init
 
 // ----------------------------------------------------
--(void) menuSetup{
-    
+-(void) buttonSetup{
 
-    //CCDirector *director = [CCDirector sharedDirector];
+    // 
+    short buttonsY = 200;
+    short buttonsX = 130;
     
-    // setup buttons
-    
-    //CGPoint menuPos = CGPointMake(
-    //                              ([director winSize].width/2),
-    //                              ([director winSize].height/2));
-    
-
-    
-    // labels
-    CCLabelTTF *gameLabel = [CCLabelTTF labelWithString:@"Play" fontName:MENU_FONT fontSize:40];
-    gameLabel.opacity = 170;
+    // three buttons:
+    // play
+    CCLabelTTF *gameLabel = [CCLabelTTF labelWithString:@"Play" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    gameLabel.opacity = BUTTON_OPACITY;
     gameLabel.color = ccc3(225, 225, 225);
     FadeTextButton *game = [FadeTextButton  itemWithLabel: gameLabel target:self  selector: @selector(goGame:)];
     game.anchorPoint = ccp(0,0);
-    game.position = ccp(0,80);
+    game.position = ccp(buttonsX,buttonsY+2*(NAV_BUTTON_SIZE-10));
     
-    CCLabelTTF *statsLabel = [CCLabelTTF labelWithString:@"Scores" fontName:MENU_FONT fontSize:40];
-    statsLabel.opacity = 170;
+    // scores
+    CCLabelTTF *statsLabel = [CCLabelTTF labelWithString:@"Scores" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    statsLabel.opacity = BUTTON_OPACITY;
     statsLabel.color = ccc3(225, 225, 225);
     FadeTextButton *stats = [FadeTextButton  itemWithLabel: statsLabel target:self  selector: @selector(goStats:)];
     stats.anchorPoint = ccp(0,0);
-    stats.position = ccp(0,40);
+    stats.position = ccp(buttonsX,buttonsY+(NAV_BUTTON_SIZE-10));
     
-    CCLabelTTF *infoLabel = [CCLabelTTF labelWithString:@"?" fontName:MENU_FONT fontSize:40];
-    infoLabel.opacity = 170;
+    // ?(rules)
+    CCLabelTTF *infoLabel = [CCLabelTTF labelWithString:@"?" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    infoLabel.opacity = BUTTON_OPACITY;
     infoLabel.color = ccc3(225, 225, 225);
     FadeTextButton *info = [FadeTextButton  itemWithLabel: infoLabel target:self  selector: @selector(goInfo:)];
     info.anchorPoint = ccp(0,0);
-    info.position = ccp(0,0);
+    info.position = ccp(buttonsX,buttonsY);
     
     CCMenu *menu = [CCMenu menuWithItems: game, stats, info, nil];
    
-
-    
     [menu setAnchorPoint:ccp(0,0)];
-    [menu setPosition:ccp(100,150)];
+    // NOTE: here i set the position of each button explicitly because
+    // aligning them vertically with the menu creates a ugly vertical gap between each button
+    [menu setPosition:ccp(0,0)];
     
-   // [menu alignItemsVertically];
     [self addChild:menu];
-    
-    
     
 } // end menuSetup
 
-// navigation
+
+#pragma mark - 
+#pragma mark button_selectors
+
+// button_selectors
+// ====================================================
 
 // ----------------------------------------------------
-
 -(void) goGame:(CCMenuItemLabel  *) menuItem {
     //[[CCDirector sharedDirector] replaceScene:[GameScene scene]];
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[GameScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[GameScene scene]]];
 } // end goPlay
 
 
 // ----------------------------------------------------
-
 -(void) goStats:(CCMenuItemLabel  *) menuItem {
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[StatsScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[StatsScene scene]]];
 } // end goStats
 
 // ----------------------------------------------------
-
 -(void) goInfo:(CCMenuItemLabel  *) menuItem {
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[InfoScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[InfoScene scene]]];
 } // end goInfo
 
 @end

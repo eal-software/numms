@@ -1,5 +1,6 @@
 
 // Copyright (c) 2011 Ethan Levien
+// FadeTextButton.m
 
 #import "FadeTextButton.h"
 
@@ -16,8 +17,6 @@ enum {
 -(id) init
 {
 	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super  init])) {
 
 	}

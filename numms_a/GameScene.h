@@ -1,24 +1,29 @@
 
 // Copyright (c) 2011 Ethan Levien
+// GameScene.h
 
 #import <Foundation/Foundation.h>
+#import "Consts.h"
 #import "cocos2d.h"
 #import "Hud.h"
 #import "StatsScene.h"
 #import "Board.h"
 #import "Score.h"
-#import "Consts.h"
+#include "DataIOManager.h"
 
 /*--------------------------------------------------------------
  Programmer: ethan levien
  
- SUMMARY: 
- 
- todo:  - clean up code
-        - empty stats array if it has two many elements, just to avoid getting memory warning
+ SUMMARY: the scene is played when player is playing the game. contians one
+          interactive component: back button( nav to hello scene ) and is also
+          capable of recieving touch events. The scene controls two main objects:
+          the hud which displays game data, and the board which encapsulates and
+          displays the games logical components( in DataMatrix.cpp)
  
  REVISIONS: 
  05/26/2011 (eal) - wrote and implemented class basics
+ 06/06/2011 (eal) - code is clean ( organized and commented )
+ 06/07/2011 (eal) - will now save no more then MAX_SCORES scores
  
  ----------------------------------------------------------------*/
 
@@ -34,13 +39,27 @@
     short bonus;
     
     Board* board;
-}
+    
+} // end interface
 
+// setup
+// ====================================================
 +(id) scene;
+-(void) buttonSetup;
+
+
+// game_control
+// ====================================================
 -(void) playLevel;
 -(void) timePlus;
+
+// button_selectors/nav
+// ====================================================
 -(void) goBack:(CCMenuItemLabel  *) menuItem ;
 -(void) gameEnd;
+
+// data
+// ====================================================
 -(void) saveStats;
 
 

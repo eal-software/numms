@@ -1,17 +1,24 @@
 
 // Copyright (c) 2011 Ethan Levien
+// Board.mm
+
 
 #import "Board.h"
 
 
 @implementation Board
 
+
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
+
 // ----------------------------------------------------
 -(id) init
 {
-	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
+
 	if( (self=[super  init])) {
         //[[SimpleAudioEngine sharedEngine] preloadEffect:@"wine.aif"];
         // cache piece textures
@@ -20,13 +27,22 @@
         [self displayBoard];
 	}
 	return self;
-}
-
-# pragma  mark - 
-# pragma  mark getters
+} // end init
 
 // ----------------------------------------------------
+-(void) dealloc {
+    [super dealloc];
+    [[CCTextureCache sharedTextureCache] removeUnusedTextures];
+} // end dealloc
 
+
+#pragma mark - 
+#pragma mark getters
+
+// getters
+// ====================================================
+
+// ----------------------------------------------------
 -(short) score{
     return dMatrix.score();
 } // end score
@@ -37,10 +53,11 @@
     return dMatrix.level();
 } // end level
 
-// ----------------------------------------------------
+#pragma mark - 
+#pragma mark game_control
 
-# pragma  mark - 
-# pragma  mark matrix_control
+// game_control
+// ====================================================
 
 -(void) nextLevel{
     dMatrix.setLevel(dMatrix.level()+1);
@@ -62,33 +79,77 @@
     return dMatrix.placePiece_human(gp.x, gp.y);
 } // end placePieceAtGposition
 
-# pragma  mark - 
-# pragma  mark display
+#pragma mark - 
+#pragma mark display
+
+// display
+// ====================================================
 
 // ----------------------------------------------------
 -(void) displayBoard{
     for (int i = 0; i < GWIDTH; i++) {
         for (int j = 0; j < GHEIGHT-1; j++) {
             
-            if (!dMatrix.drawn(i, j)) {
-                if (dMatrix.type(i, j) != EMPTY) {
+            switch (dMatrix.drawn(i, j)) {
+                // captured
+                // ----------------------------------------------------
+                case CAPTURED:
+                     [(Piece*)[self getChildByTag:i*10+j] capture];
+                    break;
+                // born
+                // ----------------------------------------------------
+                case BORN:
+                    
                     if ([self getChildByTag:i*10+j] != NULL) {
-                        [(Piece*)[self getChildByTag:i*10+j] death];
-                        
-                        //[[SimpleAudioEngine sharedEngine] playEffect:@"wine.aif"];
-                        
-                        //[self removeChildByTag:i*10+j cleanup:YES]; 
+                         [(Piece*)[self getChildByTag:i*10+j] death];  
                     }
-                    [self addChild: [self pieceFromData:CGPointMake(i, j)]];
-                    dMatrix.drawP(i, j);
-                }else {
-                    //[self removeChildByTag:i*10+j cleanup:YES]; 
-                    [(Piece*)[self getChildByTag:i*10+j] death];
-                    dMatrix.drawP(i, j);
-                }
-                
-            } // end if
+                    
+                     [self addChild: [self pieceFromData:CGPointMake(i, j)]];
+                    break;
+                    
+                // died
+                // ----------------------------------------------------
+                case DIED:
+                      [(Piece*)[self getChildByTag:i*10+j] death]; 
+                    break;
+    
+                default:
+                    break;
+            }
             
+            dMatrix.drawP(i, j);
+            
+            
+         /*   
+            
+            if (!(dMatrix.drawn(i, j) =) {
+                dMatrix.drawP(i, j);
+               
+                // there are 3 possible situations when something
+                // needs to be draw
+                
+                // capturing
+                if ([self getChildByTag:i*10+j] != NULL &&         // there is currently a piece drawn here
+                    dMatrix.type(i, j) != EMPTY                    // AND there is a piece here in the matrix
+                     ) {
+
+                   // [self addChild: [self pieceFromData:CGPointMake(i, j)]];
+                    [(Piece*)[self getChildByTag:i*10+j] capture];  // capture the old piece
+                    
+                // dying
+                } else if([self getChildByTag:i*10+j] != NULL &&    // there is currently a piece drawn here
+                          dMatrix.type(i, j) == EMPTY               // AND there is NOT a piece here in the matrix
+                          ) {
+                    [(Piece*)[self getChildByTag:i*10+j] death];    // old piece dies
+                    
+                // playing
+                } else if (dMatrix.type(i, j) != EMPTY  &&          // this cell is not empty in matrix
+                           [self getChildByTag:i*10+j] == NULL      // AND nothing is draw here
+                           ) {
+                    [self addChild: [self pieceFromData:CGPointMake(i, j)]];  // simply place piece
+                }   
+            
+            } // end if*/
         } // end for
     } // end for   
 } // end drawBoard
@@ -104,10 +165,5 @@
     return newPiece;
 
 } // end pieceFromData
-
--(void) dealloc {
-    [super dealloc];
-    [[CCTextureCache sharedTextureCache] removeUnusedTextures];
-} // end dealloc
 
 @end

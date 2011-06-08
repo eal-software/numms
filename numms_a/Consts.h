@@ -28,9 +28,9 @@
 
 // gameplay
 #define LIFESPAN               3
-#define MAX_LVL                30
-#define LVL_TIME               600
-#define LVL_SPEED              0.1f
+#define MAX_LVL                300
+#define LVL_TIME               60
+#define LVL_SPEED              1.0f
 
 // rule sets
 #define RULE_SET_1a            1

@@ -20,7 +20,9 @@
 {
 
 	if( (self=[super  init])) {
-        //[[SimpleAudioEngine sharedEngine] preloadEffect:@"wine.aif"];
+        
+        effects = [[SoundEffectManager alloc] initEffects];
+        
         // cache piece textures
         [[CCTextureCache sharedTextureCache] addImage:@"p_6a.png"];
         [[CCTextureCache sharedTextureCache] addImage:@"p_6b.png"];
@@ -32,6 +34,7 @@
 // ----------------------------------------------------
 -(void) dealloc {
     [super dealloc];
+    [effects release];
     [[CCTextureCache sharedTextureCache] removeUnusedTextures];
 } // end dealloc
 
@@ -87,6 +90,7 @@
 
 // ----------------------------------------------------
 -(void) displayBoard{
+    
     for (int i = 0; i < GWIDTH; i++) {
         for (int j = 0; j < GHEIGHT-1; j++) {
             
@@ -95,6 +99,8 @@
                 // ----------------------------------------------------
                 case CAPTURED:
                      [(Piece*)[self getChildByTag:i*10+j] capture];
+                          [effects playCapture];
+                    
                     break;
                 // born
                 // ----------------------------------------------------
@@ -119,37 +125,6 @@
             
             dMatrix.drawP(i, j);
             
-            
-         /*   
-            
-            if (!(dMatrix.drawn(i, j) =) {
-                dMatrix.drawP(i, j);
-               
-                // there are 3 possible situations when something
-                // needs to be draw
-                
-                // capturing
-                if ([self getChildByTag:i*10+j] != NULL &&         // there is currently a piece drawn here
-                    dMatrix.type(i, j) != EMPTY                    // AND there is a piece here in the matrix
-                     ) {
-
-                   // [self addChild: [self pieceFromData:CGPointMake(i, j)]];
-                    [(Piece*)[self getChildByTag:i*10+j] capture];  // capture the old piece
-                    
-                // dying
-                } else if([self getChildByTag:i*10+j] != NULL &&    // there is currently a piece drawn here
-                          dMatrix.type(i, j) == EMPTY               // AND there is NOT a piece here in the matrix
-                          ) {
-                    [(Piece*)[self getChildByTag:i*10+j] death];    // old piece dies
-                    
-                // playing
-                } else if (dMatrix.type(i, j) != EMPTY  &&          // this cell is not empty in matrix
-                           [self getChildByTag:i*10+j] == NULL      // AND nothing is draw here
-                           ) {
-                    [self addChild: [self pieceFromData:CGPointMake(i, j)]];  // simply place piece
-                }   
-            
-            } // end if*/
         } // end for
     } // end for   
 } // end drawBoard

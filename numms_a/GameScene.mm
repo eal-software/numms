@@ -31,6 +31,12 @@
 	
 
 	if( (self=[super  init])) {
+        
+        // add background sprite
+        CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_grid4.png"];
+		[self addChild:backsprite];
+		backsprite.anchorPoint = ccp(0,0);
+		backsprite.position = ccp(0,0);
 
                 
         [self buttonSetup];
@@ -45,8 +51,6 @@
         
         bonus = 0;
         [self playLevel];
-
-        
 
 
 	}

@@ -16,23 +16,14 @@
 // ---------------------------------------------------
 -(id) init
 {
-	
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super  init])) {
 
         self.anchorPoint = CGPointMake(0,0);
-		// create and initialize a Label
-        
-		
-		
-   
 		
         label = [CCLabelTTF labelWithString:@"1" fontName:PIECE_FONT fontSize:50];
         label.anchorPoint = CGPointMake(0,0);
         label.position = CGPointMake(25,8);
         label.opacity = 225;
-
         	
 	}
 	return self;

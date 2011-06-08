@@ -25,6 +25,7 @@ DataMatrix::DataMatrix(){
 bool DataMatrix::placePiece_human(short x,short y){
     short sum = checkCell_Human(x, y);
     if (sum != 0) {
+        
         bool capture = false;
         if (matrix[x][y].type == AI){
             s = s + sum;

@@ -44,7 +44,7 @@
 // ====================================================
 -(void) birth;
 -(void) death;
--(void) capture;
+-(void) capture; // changes to a human piece
 
 // misc
 // ====================================================

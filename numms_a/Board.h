@@ -3,7 +3,7 @@
 // Board.h
 
 #import <Foundation/Foundation.h>
-#import "SimpleAudioEngine.h"
+#import "SoundEffectManager.h"
 #import "cocos2d.h"
 #import "DataMatrix.h"
 #import "Piece.h"
@@ -20,12 +20,14 @@
  06/07/2011 (eal) - code is clean( organized and commented)
  06/08/2011 (eal) - altered display board method to enable specific animations
                     to be called when piece is captured, born, or dies
+                  - added sound
  ----------------------------------------------------------------*/
 
 
 @interface Board : CCNode {
 	
     DataMatrix dMatrix;
+    SoundEffectManager *effects;
     
 }
 

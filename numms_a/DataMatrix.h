@@ -89,7 +89,7 @@ private:
     // dependent on ruleset - see rules.rtf
     
     void recursive_AiPlay(short n, short &x,short &y, short &val);
-    // not yet implemented
+    // implemented, but not in use
     
     short getSum( short x, short y);
     // PRE: (x,y) is valid position on board

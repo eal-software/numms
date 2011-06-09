@@ -193,14 +193,20 @@
                              (int)(location.x*((double)GWIDTH/[director winSize].width)),
                              (int)(location.y*((double)GHEIGHT/[director winSize].height))
                              ) ;
-   
-    if ([board placePieceAtGp:gp]) {
-        [board displayBoard];
-        [board turn];
-        [board displayBoard];
-        [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
-    }
-		
+    if (gp.y < 5) {  // make sure we are on the board
+        if ([board placePieceAtGp:gp]) {
+            [board displayBoard];
+            [board turn];
+            [board displayBoard];
+            [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
+        }else{
+            
+            [board decrementScore];
+            [board animateScoreChange:(-1) atGP:gp];
+            
+        } // end else
+    } // end if
+  		
     self.isTouchEnabled = YES;
 	
 } // ccTouchEnded

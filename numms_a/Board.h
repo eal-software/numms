@@ -21,6 +21,8 @@
  06/08/2011 (eal) - altered display board method to enable specific animations
                     to be called when piece is captured, born, or dies
                   - added sound
+                  - added decrementScore and animateScoreChange
+                  - added boardToScreen
  ----------------------------------------------------------------*/
 
 
@@ -63,6 +65,11 @@
 // POST: places human piece in dMatrix, returns true of sucess
 
 
+-(void) decrementScore;
+// PRE: none
+// POST: score in dMatrix is decremented and animated
+
+
 // display
 // ====================================================
 -(void) displayBoard;
@@ -73,7 +80,12 @@
 // PRE: gp is a valid board position contianing a none-empty piece
 // POST: returns a Piece* to represent that data
 
+-(void) animateScoreChange:(short) val atGP:(CGPoint) gp;
+// PRE: none
+// POST: score change animated 
 
-
+-(CGPoint) boardToScreen:(CGPoint) gp;
+// PRE: gp is valid grid position
+// POST: returns corresponding screen coords
 
 @end

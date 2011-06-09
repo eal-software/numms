@@ -28,6 +28,7 @@ using namespace std;
                     cells were in grid inside getSum, but actual size of
                     board is GHEIGHT - 1
  06/08/2011 (eal) - replaced the bool draw with a short and altered code accordingly
+                  - added public method decrementScore
  ----------------------------------------------------------------*/
 
 
@@ -74,7 +75,8 @@ public:
     inline short score() {return s;};
     inline short level() {return lvl;};
     
-    // set
+    // scoring
+    inline void decrementScore() { s--; };
     inline void setLevel(short l) { 
         lvl = l;
        // s = 0;

@@ -24,6 +24,9 @@
  05/26/2011 (eal) - wrote and implemented class basics
  06/06/2011 (eal) - code is clean ( organized and commented )
  06/07/2011 (eal) - will now save no more then MAX_SCORES scores
+ 06/08/2011 (eal) - altered ccTouchEnded to fix bug that caused pieces to be played
+                    when player clicked above the board
+                  - score is now decremented when play clicks bad gp and is animated
  
  ----------------------------------------------------------------*/
 

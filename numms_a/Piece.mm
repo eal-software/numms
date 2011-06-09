@@ -93,12 +93,11 @@
     //fade out:
     // this runs the fadeout action on the label
 	// but then calls the second actions selector targeted to self
-	id a1;
 
-    a1 = [CCFadeOut actionWithDuration: 0.5];
+    id fade = [CCFadeOut actionWithDuration: 0.5];
     
-	id a2 = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAutoCleanup)];
-	[sprite  runAction:[CCSequence actions:a1, a2, nil]];
+	id remove = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAutoCleanup)];
+	[sprite  runAction:[CCSequence actions:fade, remove, nil]];
     
 } // death
 
@@ -114,33 +113,7 @@
     [self setType:HUMAN];
     [self setVal:val];
     
-    // draw floating num
-    NSString *numStr = [NSString stringWithFormat:@"+ %d", val];
-    
-    
-    
-    
-   CCLabelTTF *num = [CCLabelTTF 
-           labelWithString:numStr 
-           dimensions:CGSizeMake(150, 40)
-           alignment: UITextAlignmentLeft
-           fontName:STATS_FONT 
-           fontSize:40];
-    num.opacity = 225;
-    [self addChild:num];
-    
-    num.opacity = 225;
-    num.anchorPoint = ccp(0,0);
-    num.position    = ccp(0,0);
-    num.color = ccc3(180, 180, 180);
-    
-    id a1 = [CCMoveBy  actionWithDuration:1 position:ccp(0,100)];
-    id a2 = [CCFadeOut actionWithDuration:1];
-    
-    [num  runAction:a1];
-    [num  runAction:a2];
-    
-} // capture
+ } // capture
 
 
 #pragma mark - 

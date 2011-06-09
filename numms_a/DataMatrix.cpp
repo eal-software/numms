@@ -181,7 +181,7 @@ short DataMatrix::getSum( short x, short y){
         for (int j = y-1; j <= y+1; j++) {
             if (  ( i != x || j != y) &&               // the cell being looked at is not the cell being played on 
                   ( matrix[i][j].type == HUMAN) &&     // AND contians a human piece        
-                  ( i < GWIDTH && j < GHEIGHT-1) &&      // AND is within upper bounds of grid
+                  ( i < GWIDTH && j < GHEIGHT-1) &&    // AND is within upper bounds of grid
                   ( i >= 0 && j >= 0) )                // AND is within lower bounds of grid
             {           
                 sum = sum + matrix[i][j].val;          // add the cells value to the sum

@@ -82,6 +82,11 @@
     return dMatrix.placePiece_human(gp.x, gp.y);
 } // end placePieceAtGposition
 
+// ----------------------------------------------------
+-(void) decrementScore{
+    dMatrix.decrementScore();
+} // end decrementScore
+
 #pragma mark - 
 #pragma mark display
 
@@ -100,6 +105,7 @@
                 case CAPTURED:
                      [(Piece*)[self getChildByTag:i*10+j] capture];
                           [effects playCapture];
+                    [self animateScoreChange:dMatrix.val(i, j) atGP:ccp(i, j)];
                     
                     break;
                 // born
@@ -140,5 +146,52 @@
     return newPiece;
 
 } // end pieceFromData
+
+// ----------------------------------------------------
+-(void) animateScoreChange:(short) val atGP:(CGPoint) gp{
+    
+    // setup string and color
+    NSString *numStr;
+    ccColor3B clr;
+    if (val < 0) {
+        clr = ccc3(225, 0, 0);
+        numStr = [NSString stringWithFormat:@" %d", val];
+    }else{
+        clr = ccc3(180, 180, 180);
+        numStr = [NSString stringWithFormat:@" + %d", val];
+    }
+    
+ 
+    CCLabelTTF *num = [CCLabelTTF 
+                       labelWithString:numStr 
+                       dimensions:CGSizeMake(150, 40)
+                       alignment: UITextAlignmentLeft
+                       fontName:STATS_FONT 
+                       fontSize:40];
+    
+
+
+    num.opacity = 225;
+    num.color = clr;
+    num.anchorPoint = ccp(0,0);
+    num.position    = [self boardToScreen:gp];
+    
+    [self addChild:num];
+    id move = [CCMoveBy  actionWithDuration:2 position:ccp(0,200)];
+    id fade = [CCFadeOut actionWithDuration:2];
+    id animate = [CCSpawn actions:move,fade, nil];
+    id remove = [CCCallFunc actionWithTarget:num selector:@selector(removeFromParentAndCleanup:)];
+    
+	[num  runAction:[CCSequence actions:animate,remove, nil]];
+    
+} // end animateScoreChange
+
+// ----------------------------------------------------
+-(CGPoint) boardToScreen:(CGPoint) gp{
+    CCDirector *director = [CCDirector sharedDirector];
+    return CGPointMake(
+                       gp.x*([director winSize].width/(float)GWIDTH),
+                       gp.y*([director winSize].height/(float)GHEIGHT));
+} // end boardToScreen
 
 @end

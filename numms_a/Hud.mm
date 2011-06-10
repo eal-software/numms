@@ -50,8 +50,8 @@
 
 
     [self addChild:score];
-    [self addChild:bonus];
-    [self addChild:level];
+   // [self addChild:bonus];
+   // [self addChild:level];
 
 } // end labelSetup
 
@@ -116,21 +116,24 @@
     float scoreDist = ((float)s)/((float)g);
     CGPoint scoreLoc;
     CGPoint barLoc;
-
+    ccColor3B scoreColer;
     
     
     if (scoreDist > 1) { // have reached the goal
         scoreLoc = ccp(0.90*[director winSize].width,PBAR_Y);
         barLoc = ccp(0,PBAR_Y);
-        
+        scoreColer = ccc3(0, 225, 0);
+
     }else if (s < 0 ) { // handle negative scores
         scoreLoc = ccp(10,PBAR_Y);
         barLoc = ccp(-[director winSize].width,PBAR_Y);
-        
+        scoreColer = ccc3(225, 0, 0);
+
     }else{ // normal scores
         
         scoreLoc = ccp(scoreDist*[director winSize].width,PBAR_Y);
         barLoc = ccp(-[director winSize].width+scoreDist*[director winSize].width,PBAR_Y);
+        scoreColer = ccc3(225, 225, 225);
     }
     
     // move progress bar
@@ -141,12 +144,13 @@
     
    // draw score above bar
     [score setString:[NSString stringWithFormat:@" %d ", s]];
+    score.color = scoreColer;
     id fadeInAndOut = [CCSequence actions:[CCFadeIn actionWithDuration:1], [CCFadeOut actionWithDuration:1], nil];
     score.position = scoreLoc;
     [score runAction:fadeInAndOut];
     
-    [bonus setString:[NSString stringWithFormat:@" Bonus  %d ", b]];
-    [level setString:[NSString stringWithFormat:@"  Level  %d ", l]];
+   // [bonus setString:[NSString stringWithFormat:@" Bonus  %d ", b]];
+   // [level setString:[NSString stringWithFormat:@"  Level  %d ", l]];
 
 
 

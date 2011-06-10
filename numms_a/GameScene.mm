@@ -37,7 +37,6 @@
 		[self addChild:backsprite];
 		backsprite.anchorPoint = ccp(0,0);
 		backsprite.position = ccp(0,0);
-
                 
         [self buttonSetup];
        
@@ -87,7 +86,7 @@
 // ----------------------------------------------------
 -(void) playLevel{
     lvlTime = LVL_TIME;
-    goal = 5*[board level] + [board score];
+    goal = 5*[board level] + [board level];
     [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
     [self schedule:@selector(timePlus) interval:LVL_SPEED];
     
@@ -125,7 +124,7 @@
 // ----------------------------------------------------
 -(void) gameEnd{
     [self saveStats];
-    [[CCDirector sharedDirector] replaceScene:[StatsScene scene]];
+    [[CCDirector sharedDirector] replaceScene:[HelloScene scene]];
 } // end gameEnd
 
 
@@ -140,12 +139,12 @@
    
     DataIOManager *io = [DataIOManager dataIOManager];
     
-    NSMutableArray *data = [io readStats];
+   /* NSMutableArray *data = [io readStats];
     
     NSComparator sort = ^(id d1, id d2){
         Score *s1 = [NSKeyedUnarchiver unarchiveObjectWithData:d1];
         Score *s2 = [NSKeyedUnarchiver unarchiveObjectWithData:d2];
-        return [[NSNumber numberWithInt:[s2 level]] compare:[NSNumber numberWithInt:[s1 level]]];
+        return [[NSNumber numberWithInt:[s2 sum]] compare:[NSNumber numberWithInt:[s1 sum]]];
     };
 
     [data addObject:[NSKeyedArchiver archivedDataWithRootObject:
@@ -157,7 +156,13 @@
         [data removeLastObject];
     }
 
-    [io writeStats:data];
+    [io writeStats:data];*/
+    
+    short greatest = [io readGreatest];
+    if ([board score] > greatest) {
+        [io writeGreatest:[board score]];
+    }
+    [io writeLast:[board score]];
    
     
 } // end saveStats
@@ -199,6 +204,7 @@
             [board displayBoard];
             [board turn];
             [board displayBoard];
+            
         }else{
             
             [board decrementScore];
@@ -206,6 +212,10 @@
             
         } // end else
         [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
+
+
+       // [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
+
     } // end if
   		
     self.isTouchEnabled = YES;

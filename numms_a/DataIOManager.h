@@ -39,5 +39,12 @@
 // PRE:  data(assigned) is an array of encoded Score obejects
 // POST: data is written to StatsData.plist with key "Scores"
 
+-(short) readGreatest;
+-(short) readLast;
+
+-(void) writeLast:(short) last;
+-(void) writeGreatest:(short) great;
+
+
 
 @end

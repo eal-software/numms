@@ -29,12 +29,17 @@
 {
 	if( (self=[super  init])) {
         
+   
+        
         // add background sprite
         CCSprite* backsprite = [CCSprite spriteWithFile:HELLO_BACKGROUND_SPRITE];
 		[self addChild:backsprite];
 		backsprite.anchorPoint = ccp(0,0);
 		backsprite.position = ccp(0,0);
-        
+
+
+
+        [self displayStats];
         // setup buttons and enable touch
         [self buttonSetup];
         self.isTouchEnabled = YES;
@@ -58,13 +63,13 @@
     game.anchorPoint = ccp(0,0);
     game.position = ccp(buttonsX,buttonsY+2*(NAV_BUTTON_SIZE-10));
     
-    // scores
-    CCLabelTTF *statsLabel = [CCLabelTTF labelWithString:@"Scores" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
+    // scores 
+    /*CCLabelTTF *statsLabel = [CCLabelTTF labelWithString:@"Scores" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
     statsLabel.opacity = BUTTON_OPACITY;
     statsLabel.color = ccc3(225, 225, 225);
     FadeTextButton *stats = [FadeTextButton  itemWithLabel: statsLabel target:self  selector: @selector(goStats:)];
     stats.anchorPoint = ccp(0,0);
-    stats.position = ccp(buttonsX,buttonsY+(NAV_BUTTON_SIZE-10));
+    stats.position = ccp(buttonsX,buttonsY+(NAV_BUTTON_SIZE-10));*/
     
     // ?(rules)
     CCLabelTTF *infoLabel = [CCLabelTTF labelWithString:@"?" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
@@ -72,9 +77,9 @@
     infoLabel.color = ccc3(225, 225, 225);
     FadeTextButton *info = [FadeTextButton  itemWithLabel: infoLabel target:self  selector: @selector(goInfo:)];
     info.anchorPoint = ccp(0,0);
-    info.position = ccp(buttonsX,buttonsY);
+    info.position = ccp(buttonsX,buttonsY+(NAV_BUTTON_SIZE-10));
     
-    CCMenu *menu = [CCMenu menuWithItems: game, stats, info, nil];
+    CCMenu *menu = [CCMenu menuWithItems: game, info, nil];
    
     [menu setAnchorPoint:ccp(0,0)];
     // NOTE: here i set the position of each button explicitly because
@@ -84,6 +89,39 @@
     [self addChild:menu];
     
 } // end menuSetup
+
+
+// ----------------------------------------------------
+-(void) displayStats{
+    
+    
+    DataIOManager *io = [DataIOManager dataIOManager];
+    // sums
+    CCLabelTTF *greatestLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Greatest: %d ", [io readLast]]                   
+                     dimensions:CGSizeMake(320,STATS_DISP_SIZE) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    greatestLbl.anchorPoint = ccp(0,0);
+    greatestLbl.position = ccp(10,450);
+    [self addChild:greatestLbl];
+    
+    
+    // sums
+    CCLabelTTF *lastLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Last: %d ", [io readLast]]                   
+                     dimensions:CGSizeMake(320,STATS_DISP_SIZE) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    lastLbl.anchorPoint = ccp(0,0);
+    lastLbl.position = ccp(10,450-STATS_DISP_SIZE);
+    [self addChild:lastLbl];
+    
+} // end dislayStats
 
 
 #pragma mark - 
@@ -102,8 +140,9 @@
 
 // ----------------------------------------------------
 -(void) goStats:(CCMenuItemLabel  *) menuItem {
+
     [[CCDirector sharedDirector] replaceScene:
-     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[StatsScene scene]]];
+    [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[StatsScene scene]]];
 } // end goStats
 
 // ----------------------------------------------------

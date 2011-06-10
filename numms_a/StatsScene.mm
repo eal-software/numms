@@ -8,7 +8,7 @@
 
 @implementation StatsScene
 
-#define STATS_HEIGHT 430
+#define STATS_HEIGHT 200
 
 #pragma mark - 
 #pragma mark setup
@@ -39,10 +39,10 @@
        // backsprite.anchorPoint = ccp(0,0);
        // backsprite.position = ccp(0,0);
 
-        DataIOManager *io = [DataIOManager dataIOManager];
+        //DataIOManager *io = [DataIOManager dataIOManager];
         [self labelsSetup];
         [self buttonSetup];
-        [self displayStats:[io readStats]];
+       // [self displayStats:[io readStats]];
 	}
 	return self;
 } // end init
@@ -84,9 +84,9 @@
 -(void) labelsSetup{
     
     // three labels
-    
+   /* 
     // levels
-    CCLabelTTF *levelsLbl = 
+   /CCLabelTTF *levelsLbl = 
     [CCLabelTTF labelWithString:[NSString stringWithString:@"Level "]
                              dimensions:CGSizeMake(100,15) 
                       alignment:UITextAlignmentLeft 
@@ -94,21 +94,35 @@
                        fontSize:STATS_DISP_SIZE];
     
     levelsLbl.anchorPoint = ccp(0,0);
-    levelsLbl.position = ccp(40,STATS_HEIGHT+STATS_DISP_SIZE);
+    levelsLbl.position = ccp(90,STATS_HEIGHT+STATS_DISP_SIZE);
+    */
     
+    DataIOManager *io = [DataIOManager dataIOManager];
     // sums
     CCLabelTTF *sumsLbl = 
-    [CCLabelTTF labelWithString:[NSString stringWithString:@"  Score "]
-                           dimensions:CGSizeMake(100,15) 
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Greatest: %d ", [io readGreatest]]
+                           dimensions:CGSizeMake(100,STATS_DISP_SIZE) 
                       alignment:UITextAlignmentLeft 
                        fontName:STATS_FONT 
                        fontSize:STATS_DISP_SIZE];
     
     sumsLbl.anchorPoint = ccp(0,0);
-    sumsLbl.position = ccp(130,STATS_HEIGHT+STATS_DISP_SIZE);
+    sumsLbl.position = ccp(20,STATS_HEIGHT);
+    
+    // sums
+    CCLabelTTF *lastLbl = 
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Last: %d ", [io readLast]]                   
+                    dimensions:CGSizeMake(100,STATS_DISP_SIZE) 
+                      alignment:UITextAlignmentLeft 
+                       fontName:STATS_FONT 
+                       fontSize:STATS_DISP_SIZE];
+    
+    lastLbl.anchorPoint = ccp(0,0);
+    lastLbl.position = ccp(20,STATS_HEIGHT-STATS_DISP_SIZE);
+
     
     // bonuses
-    CCLabelTTF *bonusLbl = 
+   /* CCLabelTTF *bonusLbl = 
     [CCLabelTTF labelWithString:[NSString stringWithString:@"Bonus "]
                             dimensions:CGSizeMake(100,15) 
                       alignment:UITextAlignmentLeft 
@@ -116,12 +130,13 @@
                        fontSize:STATS_DISP_SIZE];
     
     bonusLbl.anchorPoint = ccp(0,0);
-    bonusLbl.position = ccp(230,STATS_HEIGHT+STATS_DISP_SIZE);
+    bonusLbl.position = ccp(230,STATS_HEIGHT+STATS_DISP_SIZE);*/
     
     // add labels
-    [self addChild: levelsLbl];
+   // [self addChild: levelsLbl];
     [self addChild: sumsLbl];
-    [self addChild: bonusLbl];
+    [self addChild:lastLbl];
+   // [self addChild: bonusLbl];
     
 } // end labelsSetup
 
@@ -190,45 +205,26 @@
         // get score object from nsdata
         Score *temp = [NSKeyedUnarchiver unarchiveObjectWithData:[data objectAtIndex:i]];
         
-        // level lbl
-        scores[i][0] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
-                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
-                                          fontSize:STATS_DISP_SIZE];
-        scores[i][0].anchorPoint = ccp(0,0);
-        scores[i][0].position = ccp(40,STATS_HEIGHT-i*STATS_DISP_SIZE);
-        
-        [scores[i][0] setString: [NSString stringWithFormat:@" %d", [temp level]]];
-        
-        [self addChild:scores[i][0]];
         
         // sum
         scores[i][1] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
-                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
+                                        dimensions:CGSizeMake(100,STATS_DISP_SIZE) alignment:UITextAlignmentRight fontName:STATS_FONT 
                                           fontSize:STATS_DISP_SIZE];
         scores[i][1].anchorPoint = ccp(0,0);
-        scores[i][1].position = ccp(130,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        scores[i][1].position = ccp(50,STATS_HEIGHT-i*STATS_DISP_SIZE);
         
         [scores[i][1] setString: [NSString stringWithFormat:@" %d", [temp sum]]];
         
         [self addChild:scores[i][1]];
         
-        // bonus
-        scores[i][2] = [CCLabelTTF labelWithString:[NSString stringWithString:@""]
-                                        dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
-                                          fontSize:STATS_DISP_SIZE];
-        scores[i][2].anchorPoint = ccp(0,0);
-        scores[i][2].position = ccp(230,STATS_HEIGHT-i*STATS_DISP_SIZE);
-        
-        [scores[i][2] setString: [NSString stringWithFormat:@"   %d", [temp bonus]]];
-        
-        [self addChild:scores[i][2]];
+
         
         if ([temp history] == 0) {
             
             // display this entry as green
-            scores[i][0].color = ccc3(0,225,0);
+           // scores[i][0].color = ccc3(0,225,0);
             scores[i][1].color = ccc3(0,225,0);
-            scores[i][2].color = ccc3(0,225,0);
+            //scores[i][2].color = ccc3(0,225,0);
            
             // increment history on element in array
             [data replaceObjectAtIndex: i withObject:

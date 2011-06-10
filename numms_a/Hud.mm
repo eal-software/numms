@@ -4,6 +4,10 @@
 
 #import "Hud.h"
 
+// local consts
+#define TBAR_Y 418
+#define PBAR_Y 400
+
 
 @implementation Hud
 
@@ -12,7 +16,10 @@
 {	
 
 	if( (self=[super  init])) {
-        [self labelSetup];        
+   
+        
+        [self pBarSetup];
+        [self labelSetup]; 
 	}
 	return self;
     
@@ -22,63 +29,142 @@
 -(void) labelSetup{
     
     
-    score = [CCLabelTTF labelWithString:@"  Score   0 " fontName:HUD_FONT fontSize:20];
-    score.position = ccp(0,440);
+    score = [CCLabelTTF labelWithString:@" 0 " fontName:HUD_FONT fontSize:20];
+    score.position = ccp(0,445);
     score.color = ccc3(225, 225, 225);
     score.anchorPoint = CGPointMake(0, 0);
-    score.opacity = 225;
+    score.opacity = 0;
     
-    bonus = [CCLabelTTF labelWithString:@" + 0 " fontName:HUD_FONT fontSize:20];
-    bonus.position = ccp(100,440);
-    bonus.color = ccc3(0, 225, 0);
+    bonus = [CCLabelTTF labelWithString:@" Bonus  0 " fontName:HUD_FONT fontSize:20];
+    bonus.position = ccp(100,445);
+    bonus.color = ccc3(225, 225, 225);
     bonus.anchorPoint = CGPointMake(0, 0);
     bonus.opacity = 225;
-    
-    time = [CCLabelTTF labelWithString:@"  Time  0 " fontName:HUD_FONT fontSize:20];
-    time.position = ccp(0,420);
-    time.color = ccc3(225, 225, 225);
-    time.anchorPoint = CGPointMake(0, 0);
-    time.opacity = 225;
+
     
     level = [CCLabelTTF labelWithString:@"  Level  0 " fontName:HUD_FONT fontSize:20];
-    level.position = ccp(0,400);
+    level.position = ccp(0,445);
     level.color = ccc3(225, 225, 225);
     level.anchorPoint = CGPointMake(0, 0);
     level.opacity = 225;
-    
-    goal = [CCLabelTTF labelWithString:@"  Goal  0 " fontName:HUD_FONT fontSize:20];
-    goal.position = ccp(100,400);
-    goal.color = ccc3(225, 225, 225);
-    goal.anchorPoint = CGPointMake(0, 0);
-    goal.opacity = 225;
-    
-    
-    
-    
+
+
     [self addChild:score];
-    [self addChild:goal];
     [self addChild:bonus];
     [self addChild:level];
-    [self addChild:time];
 
 } // end labelSetup
 
+
 // ----------------------------------------------------
--(void) setDispWithScore:(short) s Time:(short) t Level:(short) l Bonus:(short) b Goal:(short)g {
-   
-    if (s < g) {
-        score.color = ccc3(225, 0, 0);
-    }else{
-        score.color = ccc3(225, 225, 225);
+-(void) pBarSetup{
+    
+    CCDirector *director = [CCDirector sharedDirector];
+    
+    
+    CCSprite *pBarBack1 = [CCSprite spriteWithFile:@"pBar1.png"];
+    pBarBack1.anchorPoint = ccp(0,0);
+    pBarBack1.position = ccp(0,PBAR_Y);
+    [self addChild:pBarBack1];
+    
+    CCSprite *pBarBack2 = [CCSprite spriteWithFile:@"pBar1.png"];
+    pBarBack2.anchorPoint = ccp(0,0);
+    pBarBack2.position = ccp(0,TBAR_Y);
+    [self addChild:pBarBack2];
+    
+    pBarTime = [CCSprite spriteWithFile:@"pBar_purple.png"];
+    pBarTime.anchorPoint = ccp(0,0);
+    pBarTime.position = ccp(-[director winSize].width,TBAR_Y);
+    pBarTime.opacity = 70;
+    [self addChild:pBarTime];
+    
+    pBarScore = [CCSprite spriteWithFile:@"pBar_green.png"];
+    pBarScore.anchorPoint = ccp(0,0);
+    pBarScore.position = ccp(-[director winSize].width,PBAR_Y);
+    pBarScore.opacity = 40;
+    [self addChild:pBarScore];
+    
+    pBarNegScore = [CCSprite spriteWithFile:@"pBar_red.png"];
+    pBarNegScore.anchorPoint = ccp(0,0);
+    pBarNegScore.position = ccp(-[director winSize].width,PBAR_Y);
+    pBarNegScore.opacity = 0;
+    [self addChild:pBarNegScore];
+    
+    CCSprite *pBarMask1 = [CCSprite spriteWithFile:@"pBar_mask1.png"];
+    pBarMask1.anchorPoint = ccp(0,0);
+    pBarMask1.position = ccp(0,PBAR_Y);
+    [self addChild:pBarMask1];
+    
+    
+    CCSprite *pBarMask2 = [CCSprite spriteWithFile:@"pBar_mask1.png"];
+    pBarMask2.anchorPoint = ccp(0,0);
+    pBarMask2.position = ccp(0,TBAR_Y);
+    [self addChild:pBarMask2];
+
+    
+} // end pBarSetup
+
+// ----------------------------------------------------
+-(void) actionSetup{
+    
+} // end actionSetup
+
+// ----------------------------------------------------
+-(void) setScore:(short) s Level:(short) l Bonus:(short) b Goal:(short) g;{
+
+    CCDirector *director = [CCDirector sharedDirector];
+    float scoreDist = ((float)s)/((float)g);
+    CGPoint scoreLoc;
+    CGPoint barLoc;
+
+    
+    
+    if (scoreDist > 1) { // have reached the goal
+        scoreLoc = ccp(0.90*[director winSize].width,PBAR_Y);
+        barLoc = ccp(0,PBAR_Y);
+        
+    }else if (s < 0 ) { // handle negative scores
+        scoreLoc = ccp(10,PBAR_Y);
+        barLoc = ccp(-[director winSize].width,PBAR_Y);
+        
+    }else{ // normal scores
+        
+        scoreLoc = ccp(scoreDist*[director winSize].width,PBAR_Y);
+        barLoc = ccp(-[director winSize].width+scoreDist*[director winSize].width,PBAR_Y);
     }
     
-    [score setString:[NSString stringWithFormat:@"  Score   %d ", s,g]];
-    [bonus setString:[NSString stringWithFormat:@" + %d ", b]];
-    [time setString:[NSString stringWithFormat:@"  Time   %d ", t]];
-    [level setString:[NSString stringWithFormat:@"  Level    %d ", l]];
-    [goal setString:[NSString stringWithFormat:@"  Goal   %d ", g]];
+    // move progress bar
+    id moveScoreBar = 
+    [CCMoveTo actionWithDuration:1 position:barLoc];
+    [pBarScore runAction:moveScoreBar];
+
+    
+   // draw score above bar
+    [score setString:[NSString stringWithFormat:@" %d ", s]];
+    id fadeInAndOut = [CCSequence actions:[CCFadeIn actionWithDuration:1], [CCFadeOut actionWithDuration:1], nil];
+    score.position = scoreLoc;
+    [score runAction:fadeInAndOut];
+    
+    [bonus setString:[NSString stringWithFormat:@" Bonus  %d ", b]];
+    [level setString:[NSString stringWithFormat:@"  Level  %d ", l]];
+
 
 
 } // end setScoreDips
+
+// ----------------------------------------------------
+-(void) setTime:(short) t{
+    
+    float timeDist = ((float)t)/((float)LVL_TIME);
+    
+    CCDirector *director = [CCDirector sharedDirector];
+    id moveTimeBar = [CCMoveTo actionWithDuration:1 position:ccp(-[director winSize].width+timeDist*[director winSize].width,TBAR_Y)];
+    
+    
+    [pBarTime runAction:moveTimeBar];
+
+
+    
+} // end setTime
 
 @end

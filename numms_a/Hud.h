@@ -15,22 +15,29 @@
  REVISIONS: 
  05/28/2011 (eal) - wrote class
  06/06/2011 (eal) - commented
+ 06/09/2011 (eal) - added progess bar
  
  ----------------------------------------------------------------*/
 
 
 @interface Hud : CCNode {
     
-     CCLabelTTF *score;
      CCLabelTTF *bonus;
-     CCLabelTTF *goal;
-     CCLabelTTF *time;
      CCLabelTTF *level;
+     CCLabelTTF *score;
+    
+     CCSprite *pBarScore;
+     CCSprite *pBarTime;
+     CCSprite *pBarNegScore;
 
 } // end interface
 
 -(void) labelSetup;
+-(void) pBarSetup;
+-(void) actionSetup;
 
--(void) setDispWithScore:(short) s Time:(short) t Level:(short) l Bonus:(short) b Goal:(short) g;
+-(void) setScore:(short) s Level:(short) l Bonus:(short) b Goal:(short) g;
+
+-(void) setTime:(short) t;
 
 @end

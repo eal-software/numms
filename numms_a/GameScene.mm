@@ -32,7 +32,7 @@
 
 	if( (self=[super  init])) {
         
-        // add background sprite
+        //add background sprite
         CCSprite* backsprite = [CCSprite spriteWithFile:@"bg_grid4.png"];
 		[self addChild:backsprite];
 		backsprite.anchorPoint = ccp(0,0);
@@ -68,7 +68,7 @@
     backLabel.color = ccc3(225, 225, 225);
     FadeTextButton *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
     back.anchorPoint = ccp(0,0);
-    back.position = ccp([director winSize].width/4*2+35,415);
+    back.position = ccp([director winSize].width/4*2+55,435);
     
     // add to menu and as child
     CCMenu *menu = [CCMenu menuWithItems: back,nil];
@@ -88,6 +88,7 @@
 -(void) playLevel{
     lvlTime = LVL_TIME;
     goal = 5*[board level] + [board score];
+    [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
     [self schedule:@selector(timePlus) interval:LVL_SPEED];
     
 } // end playLevel
@@ -95,8 +96,8 @@
 // ----------------------------------------------------
 -(void) timePlus{
     
-    [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
-    if (lvlTime >= 0) {
+    [hud setTime:lvlTime];
+    if (lvlTime > 0) {
         lvlTime--;
     }else{
         if ([board score] >= goal) {
@@ -198,13 +199,13 @@
             [board displayBoard];
             [board turn];
             [board displayBoard];
-            [hud setDispWithScore:[board score] Time:lvlTime Level:[board level] Bonus:bonus Goal: goal];
         }else{
             
             [board decrementScore];
-            [board animateScoreChange:(-1) atGP:gp];
+           [board animateScoreChange:(-1) atGP:gp];
             
         } // end else
+        [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
     } // end if
   		
     self.isTouchEnabled = YES;

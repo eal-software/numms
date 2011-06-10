@@ -94,7 +94,7 @@
                        fontSize:STATS_DISP_SIZE];
     
     levelsLbl.anchorPoint = ccp(0,0);
-    levelsLbl.position = ccp(50,STATS_HEIGHT+STATS_DISP_SIZE);
+    levelsLbl.position = ccp(40,STATS_HEIGHT+STATS_DISP_SIZE);
     
     // sums
     CCLabelTTF *sumsLbl = 
@@ -105,7 +105,7 @@
                        fontSize:STATS_DISP_SIZE];
     
     sumsLbl.anchorPoint = ccp(0,0);
-    sumsLbl.position = ccp(150,STATS_HEIGHT+STATS_DISP_SIZE);
+    sumsLbl.position = ccp(130,STATS_HEIGHT+STATS_DISP_SIZE);
     
     // bonuses
     CCLabelTTF *bonusLbl = 
@@ -116,7 +116,7 @@
                        fontSize:STATS_DISP_SIZE];
     
     bonusLbl.anchorPoint = ccp(0,0);
-    bonusLbl.position = ccp(240,STATS_HEIGHT+STATS_DISP_SIZE);
+    bonusLbl.position = ccp(230,STATS_HEIGHT+STATS_DISP_SIZE);
     
     // add labels
     [self addChild: levelsLbl];
@@ -195,7 +195,7 @@
                                         dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
                                           fontSize:STATS_DISP_SIZE];
         scores[i][0].anchorPoint = ccp(0,0);
-        scores[i][0].position = ccp(50,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        scores[i][0].position = ccp(40,STATS_HEIGHT-i*STATS_DISP_SIZE);
         
         [scores[i][0] setString: [NSString stringWithFormat:@" %d", [temp level]]];
         
@@ -206,7 +206,7 @@
                                         dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
                                           fontSize:STATS_DISP_SIZE];
         scores[i][1].anchorPoint = ccp(0,0);
-        scores[i][1].position = ccp(150,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        scores[i][1].position = ccp(130,STATS_HEIGHT-i*STATS_DISP_SIZE);
         
         [scores[i][1] setString: [NSString stringWithFormat:@" %d", [temp sum]]];
         
@@ -217,7 +217,7 @@
                                         dimensions:CGSizeMake(40,15) alignment:UITextAlignmentRight fontName:STATS_FONT 
                                           fontSize:STATS_DISP_SIZE];
         scores[i][2].anchorPoint = ccp(0,0);
-        scores[i][2].position = ccp(240,STATS_HEIGHT-i*STATS_DISP_SIZE);
+        scores[i][2].position = ccp(230,STATS_HEIGHT-i*STATS_DISP_SIZE);
         
         [scores[i][2] setString: [NSString stringWithFormat:@"   %d", [temp bonus]]];
         

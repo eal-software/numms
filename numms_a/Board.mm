@@ -154,27 +154,25 @@
     NSString *numStr;
     ccColor3B clr;
     if (val < 0) {
-        clr = ccc3(225, 0, 0);
+        clr = ccc3(180, 0, 0);
         numStr = [NSString stringWithFormat:@" %d", val];
     }else{
         clr = ccc3(180, 180, 180);
-        numStr = [NSString stringWithFormat:@" + %d", val];
+        numStr = [NSString stringWithFormat:@" +%d", val];
     }
     
  
     CCLabelTTF *num = [CCLabelTTF 
                        labelWithString:numStr 
-                       dimensions:CGSizeMake(150, 40)
+                       dimensions:CGSizeMake(150, 20)
                        alignment: UITextAlignmentLeft
                        fontName:STATS_FONT 
-                       fontSize:40];
-    
-
+                       fontSize:20];
 
     num.opacity = 225;
     num.color = clr;
     num.anchorPoint = ccp(0,0);
-    num.position    = [self boardToScreen:gp];
+    num.position    = ccp([self boardToScreen:gp].x+30,[self boardToScreen:gp].y+30);
     
     [self addChild:num];
     id move = [CCMoveBy  actionWithDuration:2 position:ccp(0,200)];

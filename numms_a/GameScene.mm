@@ -86,7 +86,7 @@
 // ----------------------------------------------------
 -(void) playLevel{
     lvlTime = LVL_TIME;
-    goal = 5*[board level] + [board level];
+    goal = 5*[board level] + [board score];
     [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
     [self schedule:@selector(timePlus) interval:LVL_SPEED];
     

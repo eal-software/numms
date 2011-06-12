@@ -16,6 +16,9 @@
 
 @interface SoundEffectManager : NSObject {
         SystemSoundID capture_tone;
+        SystemSoundID bad_tone;
+        SystemSoundID place_tone;
+        SystemSoundID level_tone;
 }
 
 // setup
@@ -26,5 +29,8 @@
 // sounds
 // ====================================================
 -(void) playCapture;
+-(void) playBad;
+-(void) playPlace;
+-(void) playLevel;
 
 @end

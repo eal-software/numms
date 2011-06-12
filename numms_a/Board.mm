@@ -24,8 +24,8 @@
         effects = [[SoundEffectManager alloc] initEffects];
         
         // cache piece textures
-        [[CCTextureCache sharedTextureCache] addImage:@"p_6a.png"];
-        [[CCTextureCache sharedTextureCache] addImage:@"p_6b.png"];
+        [[CCTextureCache sharedTextureCache] addImage:PLAYER_PIECE_SPRITE];
+        [[CCTextureCache sharedTextureCache] addImage:AI_PIECE_SPRITE];
         [self displayBoard];
 	}
 	return self;
@@ -64,11 +64,13 @@
 
 -(void) nextLevel{
     dMatrix.setLevel(dMatrix.level()+1);
+    [effects playLevel];
 } // end nextLevel
 
 // ----------------------------------------------------
 -(void) turn{
     dMatrix.turn();
+    [effects playPlace];
 } // end update
 
 // ----------------------------------------------------
@@ -85,6 +87,7 @@
 // ----------------------------------------------------
 -(void) decrementScore{
     dMatrix.decrementScore();
+    [effects playBad];
 } // end decrementScore
 
 #pragma mark - 

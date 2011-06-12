@@ -18,6 +18,7 @@
  05/26/2011 (eal) - wrote and implemented class basics
  06/08/2011 (eal) - moved code that drew numbers on score changes to
                     board
+ 06/09/2011 (eal) - asthetic changes
  
  ----------------------------------------------------------------*/
 

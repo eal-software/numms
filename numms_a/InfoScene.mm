@@ -29,11 +29,11 @@
 
 	if( (self=[super  init])) {
         
-        CCSprite* backsprite = [CCSprite spriteWithFile:RULES_SPRITE];
-	    [self addChild:backsprite];
-        [self buttonSetup];
-        backsprite.anchorPoint = ccp(0,0);
-		backsprite.position = ccp(0,0);
+       // CCSprite* backsprite = [CCSprite spriteWithFile:RULES_SPRITE];
+	   // [self addChild:backsprite];
+       // [self buttonSetup];
+       // backsprite.anchorPoint = ccp(0,0);
+		//backsprite.position = ccp(0,0);
 
     }
 	return self;

@@ -12,6 +12,9 @@
  
  REVISIONS: 
  06/06/2011 (eal) - wrote and implemented class
+ 06/09/2011 (eal) - wrote read/writeGreatest and read/writeLast 
+                  - no longer using array to store large history 
+                    so i've commented out read/writeStats
 
  
  ----------------------------------------------------------------*/
@@ -31,11 +34,11 @@
 
 // data_io
 // ====================================================
--(NSMutableArray*) readStats;
+//-(NSMutableArray*) readStats;
 // PRE:  StatsData.plist exists and data is formated correctly
 // POST: reads Scores from StatsData.plist into array
 
--(void) writeStats:(NSMutableArray*) data;
+//-(void) writeStats:(NSMutableArray*) data;
 // PRE:  data(assigned) is an array of encoded Score obejects
 // POST: data is written to StatsData.plist with key "Scores"
 

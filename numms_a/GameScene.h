@@ -5,11 +5,12 @@
 #import <Foundation/Foundation.h>
 #import "Consts.h"
 #import "cocos2d.h"
+#import "HelloScene.h"
 #import "Hud.h"
-#import "StatsScene.h"
 #import "Board.h"
 #import "Score.h"
-#include "DataIOManager.h"
+#import "DataIOManager.h"
+#import "FadeTextButton.h"
 
 /*--------------------------------------------------------------
  Programmer: ethan levien
@@ -39,7 +40,7 @@
     // these variables are implemted here as opposed to the DataMatrix because
     // they do not effect the game logic
     short goal;    // score needed to pass level
-    short bonus;
+    short bonus;   // not displayed
     
     Board* board;
     

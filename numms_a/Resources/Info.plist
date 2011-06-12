@@ -18,7 +18,7 @@
 		<string>icon114.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.raxacoricofallapatorius.intentest</string>
+	<string>com.raxacoricofallapatorius.intens</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -32,16 +32,14 @@
 	<key>CFBundleURLTypes</key>
 	<array/>
 	<key>CFBundleVersion</key>
-	<string>194</string>
+	<string>319</string>
 	<key>Icon files</key>
 	<array/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ArnoPro-Bold.otf</string>
-		<string>ArnoPro-New.ttf</string>
-		<string>KozGoPro-ExtraLight.otf</string>
+		<string>ArnoPro-New.otf</string>
 	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>

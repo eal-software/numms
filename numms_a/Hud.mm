@@ -29,29 +29,13 @@
 -(void) labelSetup{
     
     
-    score = [CCLabelTTF labelWithString:@" 0 " fontName:HUD_FONT fontSize:20];
-    score.position = ccp(0,445);
+    score = [CCLabelTTF labelWithString:@" 0 " fontName:HUD_FONT fontSize:40];
+    score.position = ccp(0,430);
     score.color = ccc3(225, 225, 225);
     score.anchorPoint = CGPointMake(0, 0);
-    score.opacity = 0;
-    
-    bonus = [CCLabelTTF labelWithString:@" Bonus  0 " fontName:HUD_FONT fontSize:20];
-    bonus.position = ccp(100,445);
-    bonus.color = ccc3(225, 225, 225);
-    bonus.anchorPoint = CGPointMake(0, 0);
-    bonus.opacity = 225;
-
-    
-    level = [CCLabelTTF labelWithString:@"  Level  0 " fontName:HUD_FONT fontSize:20];
-    level.position = ccp(0,445);
-    level.color = ccc3(225, 225, 225);
-    level.anchorPoint = CGPointMake(0, 0);
-    level.opacity = 225;
-
+    score.opacity = 100;
 
     [self addChild:score];
-   // [self addChild:bonus];
-   // [self addChild:level];
 
 } // end labelSetup
 
@@ -62,41 +46,37 @@
     CCDirector *director = [CCDirector sharedDirector];
     
     
-    CCSprite *pBarBack1 = [CCSprite spriteWithFile:@"pBar1.png"];
+    CCSprite *pBarBack1 = [CCSprite spriteWithFile:@"pbar_greenback.png"];
     pBarBack1.anchorPoint = ccp(0,0);
     pBarBack1.position = ccp(0,PBAR_Y);
     [self addChild:pBarBack1];
     
-    CCSprite *pBarBack2 = [CCSprite spriteWithFile:@"pBar1.png"];
+    CCSprite *pBarBack2 = [CCSprite spriteWithFile:@"pbar_yellowback.png"];
     pBarBack2.anchorPoint = ccp(0,0);
     pBarBack2.position = ccp(0,TBAR_Y);
     [self addChild:pBarBack2];
     
-    pBarTime = [CCSprite spriteWithFile:@"pBar_purple.png"];
-    pBarTime.anchorPoint = ccp(0,0);
-    pBarTime.position = ccp(-[director winSize].width,TBAR_Y);
-    pBarTime.opacity = 70;
-    [self addChild:pBarTime];
     
-    pBarScore = [CCSprite spriteWithFile:@"pBar_green.png"];
+    pBarScore = [CCSprite spriteWithFile:@"pbar_green.png"];
     pBarScore.anchorPoint = ccp(0,0);
     pBarScore.position = ccp(-[director winSize].width,PBAR_Y);
-    pBarScore.opacity = 40;
+    pBarScore.opacity = 225;
     [self addChild:pBarScore];
     
-    pBarNegScore = [CCSprite spriteWithFile:@"pBar_red.png"];
-    pBarNegScore.anchorPoint = ccp(0,0);
-    pBarNegScore.position = ccp(-[director winSize].width,PBAR_Y);
-    pBarNegScore.opacity = 0;
-    [self addChild:pBarNegScore];
+    pBarTime = [CCSprite spriteWithFile:@"pbar_yellow.png"];
+    pBarTime.anchorPoint = ccp(0,0);
+    pBarTime.position = ccp(-[director winSize].width,TBAR_Y);
+    pBarTime.opacity = 225;
+    [self addChild:pBarTime];
+
     
-    CCSprite *pBarMask1 = [CCSprite spriteWithFile:@"pBar_mask1.png"];
+    CCSprite *pBarMask1 = [CCSprite spriteWithFile:@"pbar_mask.png"];
     pBarMask1.anchorPoint = ccp(0,0);
     pBarMask1.position = ccp(0,PBAR_Y);
     [self addChild:pBarMask1];
     
     
-    CCSprite *pBarMask2 = [CCSprite spriteWithFile:@"pBar_mask1.png"];
+    CCSprite *pBarMask2 = [CCSprite spriteWithFile:@"pbar_mask.png"];
     pBarMask2.anchorPoint = ccp(0,0);
     pBarMask2.position = ccp(0,TBAR_Y);
     [self addChild:pBarMask2];
@@ -114,26 +94,29 @@
 
     CCDirector *director = [CCDirector sharedDirector];
     float scoreDist = ((float)s)/((float)g);
-    CGPoint scoreLoc;
     CGPoint barLoc;
     ccColor3B scoreColer;
     
     
     if (scoreDist > 1) { // have reached the goal
-        scoreLoc = ccp(0.90*[director winSize].width,PBAR_Y);
+
         barLoc = ccp(0,PBAR_Y);
-        scoreColer = ccc3(0, 225, 0);
+        scoreColer = ccc3(74, 148, 52);
+    
+
 
     }else if (s < 0 ) { // handle negative scores
-        scoreLoc = ccp(10,PBAR_Y);
-        barLoc = ccp(-[director winSize].width,PBAR_Y);
+
+        barLoc = ccp(-[director winSize].width,PBAR_Y);       
         scoreColer = ccc3(225, 0, 0);
 
     }else{ // normal scores
         
-        scoreLoc = ccp(scoreDist*[director winSize].width,PBAR_Y);
         barLoc = ccp(-[director winSize].width+scoreDist*[director winSize].width,PBAR_Y);
-        scoreColer = ccc3(225, 225, 225);
+
+        scoreColer = ccc3(220, 196, 141);
+
+
     }
     
     // move progress bar
@@ -145,8 +128,8 @@
    // draw score above bar
     [score setString:[NSString stringWithFormat:@" %d ", s]];
     score.color = scoreColer;
-    id fadeInAndOut = [CCSequence actions:[CCFadeIn actionWithDuration:1], [CCFadeOut actionWithDuration:1], nil];
-    score.position = scoreLoc;
+    id fadeInAndOut = [CCSequence actions:[CCFadeTo actionWithDuration:1 opacity:225], 
+                       [CCFadeTo actionWithDuration:1 opacity:100], nil];
     [score runAction:fadeInAndOut];
     
    // [bonus setString:[NSString stringWithFormat:@" Bonus  %d ", b]];

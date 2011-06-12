@@ -22,8 +22,6 @@
 
 @interface Hud : CCNode {
     
-     CCLabelTTF *bonus;
-     CCLabelTTF *level;
      CCLabelTTF *score;
     
      CCSprite *pBarScore;

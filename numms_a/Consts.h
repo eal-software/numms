@@ -45,10 +45,10 @@
 // graphics constants
 // ----------------------------------------------------
 // fonts
-#define MENU_FONT              @"ArnoPro-Bold.otf"
-#define STATS_FONT             @"ArnoPro-Bold.otf"
-#define HUD_FONT               @"ArnoPro-Bold.otf"
-#define PIECE_FONT             @"ArnoPro-Bold.otf"
+#define MENU_FONT              @"ArnoPro-New.otf"
+#define STATS_FONT             @"ArnoPro-New.otf"
+#define HUD_FONT               @"ArnoPro-New.otf"
+#define PIECE_FONT             @"ArnoPro-New.otf"
 
 // text
 #define BACK_TEXT              @"Back"
@@ -63,9 +63,10 @@
 #define SCENE_TRANS_TIME       0.4f
 
 // sprites
-#define PLAYER_PIECE_SPRITE           @"p_6a.png"
-#define AI_PIECE_SPRITE               @"p_6b.png"
-#define HELLO_BACKGROUND_SPRITE       @"bg_hello1.png"
+#define PLAYER_PIECE_SPRITE           @"piece_player.png"
+#define AI_PIECE_SPRITE               @"piece_ai.png"
+#define BACKGROUND_GAME               @"background_game.png"
+#define BACKGROUND_HELLO              @"bg_hello1.png"
 #define RULES_SPRITE                  @"bg_rules3.png"
 
 #pragma mark -

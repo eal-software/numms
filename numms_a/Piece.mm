@@ -46,22 +46,22 @@
 -(void) setType: (short) t{
     type = t;
     if (type == HUMAN) {
-        sprite = [CCSprite spriteWithTexture:[[CCTextureCache sharedTextureCache] addImage:@"p_6a.png"]];
+        sprite = [CCSprite spriteWithTexture:[[CCTextureCache sharedTextureCache] addImage:PLAYER_PIECE_SPRITE]];
         sprite.anchorPoint = CGPointMake(0,0);
-        sprite.opacity = 225;
-        label.color = ccc3(0,0,0);
+        sprite.opacity = 200;
+        label.color = ccc3(0, 0, 0);
         [self addChild:sprite];
-        [sprite addChild:label];
+        [self addChild:label];
         
     }else if(type == AI){
         
         
-        sprite = [CCSprite spriteWithTexture:[[CCTextureCache sharedTextureCache] addImage:@"p_6b.png"]];
+        sprite = [CCSprite spriteWithTexture:[[CCTextureCache sharedTextureCache] addImage:AI_PIECE_SPRITE]];
         sprite.anchorPoint = CGPointMake(0,0);
         sprite.opacity = 225;
-        label.color = ccc3(0,0,0);
+        label.color = ccc3(0, 0, 0);
         [self addChild:sprite];
-        [sprite addChild:label];
+        [self addChild:label];
     }
 
 } // end setType
@@ -94,9 +94,10 @@
     // this runs the fadeout action on the label
 	// but then calls the second actions selector targeted to self
 
-    id fade = [CCFadeOut actionWithDuration: 0.5];
+    id fade = [CCSequence actions: [CCFadeTo actionWithDuration:0.1 opacity:225], [CCFadeTo actionWithDuration:0.4 opacity:0],nil];
     
 	id remove = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAutoCleanup)];
+    [label runAction:fade];
 	[sprite  runAction:[CCSequence actions:fade, remove, nil]];
     
 } // death

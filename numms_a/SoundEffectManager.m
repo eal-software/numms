@@ -20,17 +20,37 @@
 -(id) initEffects{
     if( (self=[super init]) ) {
         
+        NSString *toneFilename;
+        NSURL *toneURLRef;
+
         
-        NSString *toneFilename = [NSString stringWithString:@"wine"];
-        
-        NSURL *toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
+        // cache capture
+        toneFilename = [NSString stringWithString:@"capture"];
+        toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
                                                     withExtension:@"aif"];
+        AudioServicesCreateSystemSoundID((CFURLRef) toneURLRef,&capture_tone);
         
         
-        AudioServicesCreateSystemSoundID(
-                                         (CFURLRef) toneURLRef,
-                                         &capture_tone
-                                         );
+        // cache bad
+        toneFilename = [NSString stringWithString:@"bad"];
+        toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
+                                                    withExtension:@"aif"];      
+        AudioServicesCreateSystemSoundID((CFURLRef) toneURLRef,&bad_tone );
+
+        // cache place
+        toneFilename = [NSString stringWithString:@"place"];
+        toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
+                                             withExtension:@"aif"];      
+        AudioServicesCreateSystemSoundID( (CFURLRef) toneURLRef,&place_tone);
+        
+        // chace place
+        toneFilename = [NSString stringWithString:@"level"];
+        toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
+                                             withExtension:@"aif"];      
+        AudioServicesCreateSystemSoundID( (CFURLRef) toneURLRef,&level_tone);
+
+
+
 
     }
     return self;
@@ -46,7 +66,20 @@
 // ---------------------------------------------------
 -(void) playCapture{
     AudioServicesPlaySystemSound(capture_tone);
-} // playCapture
+} // end playCapture
+
+// ---------------------------------------------------
+-(void) playBad{
+    AudioServicesPlaySystemSound(bad_tone);
+} // end playBad
+
+-(void) playPlace{
+    AudioServicesPlaySystemSound(place_tone);
+} // end playPlace
+
+-(void) playLevel{
+    AudioServicesPlaySystemSound(level_tone);
+} // end playLevel
 
 
 @end

@@ -23,7 +23,7 @@
 // ====================================================
 
 // ----------------------------------------------------
--(NSMutableArray*) readStats{
+/*-(NSMutableArray*) readStats{
     
    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
@@ -44,10 +44,10 @@
     NSMutableArray *data = [NSMutableArray arrayWithArray:[temp objectForKey:@"Scores"]];  
     
     return  data;
-} // end readStats
+}*/ // end readStats
 
 // ----------------------------------------------------
--(void) writeStats:(NSMutableArray*) data{
+/*-(void) writeStats:(NSMutableArray*) data{
     
     
     
@@ -71,7 +71,7 @@
     }
     
     
-} // end writeStats
+}*/ // end writeStats
 
 
 -(short) readGreatest{

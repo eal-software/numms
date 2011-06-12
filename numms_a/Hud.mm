@@ -11,6 +11,12 @@
 
 @implementation Hud
 
+#pragma mark - 
+#pragma mark setup
+
+// setup
+// ====================================================
+
 // ----------------------------------------------------
 -(id) init
 {	
@@ -29,8 +35,8 @@
 -(void) labelSetup{
     
     
-    score = [CCLabelTTF labelWithString:@" 0 " fontName:HUD_FONT fontSize:40];
-    score.position = ccp(0,430);
+    score = [CCLabelTTF labelWithString:@"0 " fontName:HUD_FONT fontSize:40];
+    score.position = ccp(20,430);
     score.color = ccc3(225, 225, 225);
     score.anchorPoint = CGPointMake(0, 0);
     score.opacity = 200;
@@ -89,8 +95,16 @@
     
 } // end actionSetup
 
+
+
+#pragma mark - 
+#pragma update_display
+
+// update_diplsay
+// ====================================================
+
 // ----------------------------------------------------
--(void) setScore:(short) s Level:(short) l Bonus:(short) b Goal:(short) g;{
+-(void) setScore:(short) s Level:(short) l Goal:(short) g;{
 
     CCDirector *director = [CCDirector sharedDirector];
     float scoreDist = ((float)s)/((float)g);
@@ -126,7 +140,7 @@
 
     
    // draw score above bar
-    [score setString:[NSString stringWithFormat:@" %d ", s]];
+    [score setString:[NSString stringWithFormat:@"%d ", s]];
     score.color = scoreColer;
     id fadeInAndOut = [CCSequence actions:[CCFadeTo actionWithDuration:1 opacity:225], 
                        [CCFadeTo actionWithDuration:1 opacity:200], nil];

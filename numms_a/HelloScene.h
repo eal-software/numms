@@ -44,7 +44,6 @@
 // button_selectors
 // ====================================================
 -(void) goGame:(CCMenuItemLabel  *) menuItem ;
--(void) goStats:(CCMenuItemLabel  *) menuItem ;
 -(void) goInfo:(CCMenuItemLabel  *) menuItem ;
 
 @end

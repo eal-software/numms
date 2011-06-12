@@ -43,12 +43,12 @@
         board = [Board node];
         hud = [Hud node];
         
-        [self addChild:board];
         [self addChild:hud];
+        [self addChild:board];
+        
         
         self.isTouchEnabled = YES;
-        
-        bonus = 0;
+
         [self playLevel];
 
 
@@ -86,8 +86,8 @@
 // ----------------------------------------------------
 -(void) playLevel{
     lvlTime = LVL_TIME;
-    goal = [board level]*[board level] + [board score];
-    [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
+    goal = 2*[board level]*[board level] + [board score];
+    [hud setScore:[board score] Level:[board level] Goal:goal];  // <--------- hud score updated
     [self schedule:@selector(timePlus) interval:LVL_SPEED];
     
 } // end playLevel
@@ -101,11 +101,10 @@
     }else{
         if ([board score] >= goal) {
             [self unschedule:@selector(timePlus)];
-            bonus = bonus + ( [board score] - goal );
             [board nextLevel];
             [self playLevel];
         }else{
-            [self unschedule:@selector(timePlus)];
+            [self unschedule:@selector(timePlus)];     // <--------- hud time updated
             [board gameOver];
             [self gameEnd];
         }
@@ -128,7 +127,7 @@
 // ----------------------------------------------------
 -(void) gameEnd{
     [self saveStats];
-    
+    self.isTouchEnabled = NO;
     CCDirector *director = [CCDirector sharedDirector];
     
     CCLabelTTF *gameOver = [CCLabelTTF labelWithString:@"Game Over" fontName:MENU_FONT fontSize:50];
@@ -137,8 +136,9 @@
     gameOver.position = ccp([director winSize].width/2,[director winSize].height/2);
     [self addChild:gameOver];
     
-    id fade = [CCFadeIn actionWithDuration:2];
+    id fade = [CCSequence actions:[CCFadeIn actionWithDuration:1],[CCFadeTo actionWithDuration:2 opacity:224],nil];
     id remove = [CCCallFunc actionWithTarget:self selector:@selector(gameExit)];
+    
     [gameOver runAction:[CCSequence actions:fade, remove, nil]];
    
 } // end gameEnd
@@ -209,14 +209,12 @@
             
         }else{
             
-            [board decrementScore];
+           [board decrementScore];
            [board animateScoreChange:(-1) atGP:gp];
             
         } // end else
-        [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
+        [hud setScore:[board score] Level:[board level] Goal:goal];    // <--------- hud score updated
 
-
-       // [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
 
     } // end if
   		

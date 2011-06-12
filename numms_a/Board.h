@@ -13,6 +13,7 @@
  Programmer: ethan levien
  
  SUMMARY: objective c container for datamatrix that also handles drawing, should be no game logic here!
+          also handles sound
  
  REVISIONS: 
  05/27/2011 (eal) - wrote and implemented class basics
@@ -72,7 +73,7 @@
 
 -(void) gameOver;
 // PRE: none
-// POST: gameends
+// POST: end of game sounds animations
 
 
 // display

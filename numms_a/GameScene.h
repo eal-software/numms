@@ -40,7 +40,6 @@
     // these variables are implemted here as opposed to the DataMatrix because
     // they do not effect the game logic
     short goal;    // score needed to pass level
-    short bonus;   // not displayed
     
     Board* board;
     

@@ -67,7 +67,7 @@
 #define AI_PIECE_SPRITE               @"piece_ai.png"
 #define BACKGROUND_GAME               @"background_game.png"
 #define BACKGROUND_HELLO              @"background_hello.png"
-#define RULES_SPRITE                  @"bg_rules3.png"
+#define BACKGROUND_RULES              @"background_rules.png"
 
 #pragma mark -
 #pragma mark data

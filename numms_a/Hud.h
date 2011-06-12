@@ -30,12 +30,19 @@
 
 } // end interface
 
+
+// setup
+// ====================================================
 -(void) labelSetup;
 -(void) pBarSetup;
 -(void) actionSetup;
 
--(void) setScore:(short) s Level:(short) l Bonus:(short) b Goal:(short) g;
+// update_diplsay
+// ====================================================
+-(void) setScore:(short) s Level:(short) l Goal:(short) g;
+// used everytime score or goal change
 
 -(void) setTime:(short) t;
+// when time changes
 
 @end

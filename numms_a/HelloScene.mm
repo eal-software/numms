@@ -51,33 +51,25 @@
 -(void) buttonSetup{
 
     // 
-    short buttonsY = 150;
-    short buttonsX = 100;
+    short buttonsY = 100;
+    short buttonsX = 10;
     
     // three buttons:
     // play
-    CCLabelTTF *gameLabel = [CCLabelTTF labelWithString:@"Play" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE*2];
+    CCLabelTTF *gameLabel = [CCLabelTTF labelWithString:@"Play" fontName:MENU_FONT fontSize:150];
     gameLabel.opacity = BUTTON_OPACITY;
-    gameLabel.color = ccc3(155, 108, 134);
+    gameLabel.color = ccc3(0, 0, 0);
     FadeTextButton *game = [FadeTextButton  itemWithLabel: gameLabel target:self  selector: @selector(goGame:)];
     game.anchorPoint = ccp(0,0);
-    game.position = ccp(buttonsX,buttonsY+(2*NAV_BUTTON_SIZE-10));
-
-    // scores 
-    /*CCLabelTTF *statsLabel = [CCLabelTTF labelWithString:@"Scores" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
-    statsLabel.opacity = BUTTON_OPACITY;
-    statsLabel.color = ccc3(225, 225, 225);
-    FadeTextButton *stats = [FadeTextButton  itemWithLabel: statsLabel target:self  selector: @selector(goStats:)];
-    stats.anchorPoint = ccp(0,0);
-    stats.position = ccp(buttonsX,buttonsY+(NAV_BUTTON_SIZE-10));*/
+    game.position = ccp(buttonsX,buttonsY+60);
     
     // ?(rules)
-    CCLabelTTF *infoLabel = [CCLabelTTF labelWithString:@"?" fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE*2];
+    CCLabelTTF *infoLabel = [CCLabelTTF labelWithString:@"Rules" fontName:MENU_FONT fontSize:75];
     infoLabel.opacity = BUTTON_OPACITY;
-    infoLabel.color = ccc3(155, 108, 134);
+    infoLabel.color = ccc3(0, 0, 0);
     FadeTextButton *info = [FadeTextButton  itemWithLabel: infoLabel target:self  selector: @selector(goInfo:)];
     info.anchorPoint = ccp(0,0);
-    info.position = ccp(buttonsX,buttonsY);
+    info.position = ccp(buttonsX+7,buttonsY);
     
     CCMenu *menu = [CCMenu menuWithItems: game, info, nil];
    
@@ -98,13 +90,13 @@
     DataIOManager *io = [DataIOManager dataIOManager];
     // sums
     CCLabelTTF *greatestLbl = 
-    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Best: %d ", [io readGreatest]]                   
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Best: %d ", [io readGreatest]]                   
                      dimensions:CGSizeMake(320,STATS_DISP_SIZE) 
                       alignment:UITextAlignmentLeft 
                        fontName:STATS_FONT 
                        fontSize:STATS_DISP_SIZE];
     
-    greatestLbl.opacity = BUTTON_OPACITY;
+    greatestLbl.opacity = 225;
     greatestLbl.color = ccc3(220,196,148);
     greatestLbl.anchorPoint = ccp(0,0);
     greatestLbl.position = ccp(10,420);
@@ -113,13 +105,13 @@
     
     // sums
     CCLabelTTF *lastLbl = 
-    [CCLabelTTF labelWithString:[NSString stringWithFormat:@" Last: %d ", [io readLast]]                   
+    [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Last: %d ", [io readLast]]                   
                      dimensions:CGSizeMake(320,STATS_DISP_SIZE) 
                       alignment:UITextAlignmentLeft 
                        fontName:STATS_FONT 
                        fontSize:STATS_DISP_SIZE];
     
-    lastLbl.opacity = BUTTON_OPACITY;
+    lastLbl.opacity = 225;
     lastLbl.color = ccc3(220,196,148);
     lastLbl.anchorPoint = ccp(0,0);
     lastLbl.position = ccp(10,420-STATS_DISP_SIZE);
@@ -136,23 +128,15 @@
 
 // ----------------------------------------------------
 -(void) goGame:(CCMenuItemLabel  *) menuItem {
-    //[[CCDirector sharedDirector] replaceScene:[GameScene scene]];
     [[CCDirector sharedDirector] replaceScene:
      [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[GameScene scene]]];
 } // end goPlay
 
 
 // ----------------------------------------------------
--(void) goStats:(CCMenuItemLabel  *) menuItem {
-
-   //
-    
-} // end goStats
-
-// ----------------------------------------------------
 -(void) goInfo:(CCMenuItemLabel  *) menuItem {
-    //[[CCDirector sharedDirector] replaceScene:
-     //[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[InfoScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[InfoScene scene]]];
 } // end goInfo
 
 @end

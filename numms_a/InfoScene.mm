@@ -29,11 +29,11 @@
 
 	if( (self=[super  init])) {
         
-       // CCSprite* backsprite = [CCSprite spriteWithFile:RULES_SPRITE];
-	   // [self addChild:backsprite];
-       // [self buttonSetup];
-       // backsprite.anchorPoint = ccp(0,0);
-		//backsprite.position = ccp(0,0);
+       CCSprite* backsprite = [CCSprite spriteWithFile:BACKGROUND_RULES];
+	   [self addChild:backsprite];
+       [self buttonSetup];
+       backsprite.anchorPoint = ccp(0,0);
+		backsprite.position = ccp(0,0);
 
     }
 	return self;
@@ -46,10 +46,9 @@
     // back
     CCLabelTTF *backLabel = [CCLabelTTF labelWithString:BACK_TEXT fontName:MENU_FONT fontSize:NAV_BUTTON_SIZE];
     backLabel.opacity = BUTTON_OPACITY;
-    backLabel.color = ccc3(225, 225, 225);
+    backLabel.color = ccc3(131, 93, 114);
     FadeTextButton *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
-    back.anchorPoint = ccp(0,0);
-    back.position = ccp(10,10);
+    back.position = ccp(160,40);
     
     // add to menu and as child
     CCMenu *menu = [CCMenu menuWithItems: back,nil];

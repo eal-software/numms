@@ -19,6 +19,7 @@
         SystemSoundID bad_tone;
         SystemSoundID place_tone;
         SystemSoundID level_tone;
+        SystemSoundID gameover_tone;
 }
 
 // setup
@@ -32,5 +33,6 @@
 -(void) playBad;
 -(void) playPlace;
 -(void) playLevel;
+-(void) playGameover;
 
 @end

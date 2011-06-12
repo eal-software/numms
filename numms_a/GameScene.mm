@@ -67,7 +67,7 @@
     backLabel.color = ccc3(131, 93, 114);
     FadeTextButton *back = [FadeTextButton  itemWithLabel: backLabel target:self  selector: @selector(goBack:)];
     back.anchorPoint = ccp(0,0);
-    back.position = ccp([director winSize].width/4*2+55,435);
+    back.position = ccp([director winSize].width/4*2+55,430);
     
     // add to menu and as child
     CCMenu *menu = [CCMenu menuWithItems: back,nil];
@@ -86,7 +86,7 @@
 // ----------------------------------------------------
 -(void) playLevel{
     lvlTime = LVL_TIME;
-    goal = 5*[board level] + [board score];
+    goal = [board level]*[board level] + [board score];
     [hud setScore:[board score] Level:[board level] Bonus:bonus Goal:goal];
     [self schedule:@selector(timePlus) interval:LVL_SPEED];
     
@@ -100,10 +100,13 @@
         lvlTime--;
     }else{
         if ([board score] >= goal) {
+            [self unschedule:@selector(timePlus)];
             bonus = bonus + ( [board score] - goal );
             [board nextLevel];
             [self playLevel];
         }else{
+            [self unschedule:@selector(timePlus)];
+            [board gameOver];
             [self gameEnd];
         }
     }
@@ -118,15 +121,32 @@
 
 // ----------------------------------------------------
 -(void) goBack:(CCMenuItemLabel  *) menuItem {
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
+    [[CCDirector sharedDirector] replaceScene:
+     [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
 } // end goBack
 
 // ----------------------------------------------------
 -(void) gameEnd{
     [self saveStats];
-    [[CCDirector sharedDirector] replaceScene:[HelloScene scene]];
+    
+    CCDirector *director = [CCDirector sharedDirector];
+    
+    CCLabelTTF *gameOver = [CCLabelTTF labelWithString:@"Game Over" fontName:MENU_FONT fontSize:50];
+    gameOver.opacity = 0;
+    gameOver.color =  ccc3(131, 93, 114);
+    gameOver.position = ccp([director winSize].width/2,[director winSize].height/2);
+    [self addChild:gameOver];
+    
+    id fade = [CCFadeIn actionWithDuration:2];
+    id remove = [CCCallFunc actionWithTarget:self selector:@selector(gameExit)];
+    [gameOver runAction:[CCSequence actions:fade, remove, nil]];
+   
 } // end gameEnd
 
+-(void) gameExit{
+     [[CCDirector sharedDirector] replaceScene:
+      [CCTransitionFade transitionWithDuration:SCENE_TRANS_TIME scene:[HelloScene scene]]];
+} // gameExit
 
 #pragma mark - 
 #pragma mark data
@@ -139,24 +159,6 @@
    
     DataIOManager *io = [DataIOManager dataIOManager];
     
-   /* NSMutableArray *data = [io readStats];
-    
-    NSComparator sort = ^(id d1, id d2){
-        Score *s1 = [NSKeyedUnarchiver unarchiveObjectWithData:d1];
-        Score *s2 = [NSKeyedUnarchiver unarchiveObjectWithData:d2];
-        return [[NSNumber numberWithInt:[s2 sum]] compare:[NSNumber numberWithInt:[s1 sum]]];
-    };
-
-    [data addObject:[NSKeyedArchiver archivedDataWithRootObject:
-                        [Score scoreWithLvl:[board level] Sum:[board score] Bonus:bonus History:0]]];
-    [data sortUsingComparator:sort];
-    
-    // remove objects st. array is less then 21 elements
-    while ([data count] > MAX_SCORES) {
-        [data removeLastObject];
-    }
-
-    [io writeStats:data];*/
     
     short greatest = [io readGreatest];
     if ([board score] > greatest) {

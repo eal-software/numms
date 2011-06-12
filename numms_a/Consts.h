@@ -29,7 +29,7 @@
 // gameplay
 #define LIFESPAN               3
 #define MAX_LVL                300
-#define LVL_TIME               60
+#define LVL_TIME               30
 #define LVL_SPEED              1.0f
 
 // rule sets
@@ -55,7 +55,7 @@
 
 // size and color
 #define NAV_BUTTON_SIZE        40
-#define STATS_DISP_SIZE        18
+#define STATS_DISP_SIZE        40
 #define BUTTON_OPACITY         170
 
 
@@ -66,7 +66,7 @@
 #define PLAYER_PIECE_SPRITE           @"piece_player.png"
 #define AI_PIECE_SPRITE               @"piece_ai.png"
 #define BACKGROUND_GAME               @"background_game.png"
-#define BACKGROUND_HELLO              @"bg_hello1.png"
+#define BACKGROUND_HELLO              @"background_hello.png"
 #define RULES_SPRITE                  @"bg_rules3.png"
 
 #pragma mark -

@@ -33,7 +33,7 @@
     score.position = ccp(0,430);
     score.color = ccc3(225, 225, 225);
     score.anchorPoint = CGPointMake(0, 0);
-    score.opacity = 100;
+    score.opacity = 200;
 
     [self addChild:score];
 
@@ -129,7 +129,7 @@
     [score setString:[NSString stringWithFormat:@" %d ", s]];
     score.color = scoreColer;
     id fadeInAndOut = [CCSequence actions:[CCFadeTo actionWithDuration:1 opacity:225], 
-                       [CCFadeTo actionWithDuration:1 opacity:100], nil];
+                       [CCFadeTo actionWithDuration:1 opacity:200], nil];
     [score runAction:fadeInAndOut];
     
    // [bonus setString:[NSString stringWithFormat:@" Bonus  %d ", b]];

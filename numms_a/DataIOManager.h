@@ -15,6 +15,7 @@
  06/09/2011 (eal) - wrote read/writeGreatest and read/writeLast 
                   - no longer using array to store large history 
                     so i've commented out read/writeStats
+ 06/11/2011 (eal) - fixed bug saving scores
 
  
  ----------------------------------------------------------------*/
@@ -42,8 +43,9 @@
 // PRE:  data(assigned) is an array of encoded Score obejects
 // POST: data is written to StatsData.plist with key "Scores"
 
--(short) readGreatest;
 -(short) readLast;
+-(short) readGreatest;
+
 
 -(void) writeLast:(short) last;
 -(void) writeGreatest:(short) great;

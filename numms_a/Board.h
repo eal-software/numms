@@ -23,6 +23,7 @@
                   - added sound
                   - added decrementScore and animateScoreChange
                   - added boardToScreen
+ 06/11/2011 (eal) - added gameover to play game over sound
  ----------------------------------------------------------------*/
 
 
@@ -68,6 +69,10 @@
 -(void) decrementScore;
 // PRE: none
 // POST: score in dMatrix is decremented and animated
+
+-(void) gameOver;
+// PRE: none
+// POST: gameends
 
 
 // display

@@ -90,6 +90,11 @@
     [effects playBad];
 } // end decrementScore
 
+// ----------------------------------------------------
+-(void) gameOver{
+    [effects playGameover];
+} // end gameOver
+
 #pragma mark - 
 #pragma mark display
 
@@ -157,10 +162,10 @@
     NSString *numStr;
     ccColor3B clr;
     if (val < 0) {
-        clr = ccc3(180, 0, 0);
+        clr = ccc3(225, 0, 0);
         numStr = [NSString stringWithFormat:@" %d", val];
     }else{
-        clr = ccc3(180, 180, 180);
+        clr = ccc3(74, 148, 52);
         numStr = [NSString stringWithFormat:@" +%d", val];
     }
     

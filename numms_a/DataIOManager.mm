@@ -73,18 +73,44 @@
     
 }*/ // end writeStats
 
-
--(short) readGreatest{
+// ----------------------------------------------------
+-(short) readLast{
     
     rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                     NSUserDomainMask, YES) objectAtIndex:0];
     
     dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
+  /*  if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
         dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
         
-    }    
+    }  */  
+    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
+    NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
+                                          propertyListFromData:plistXML
+                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                                          format:&format
+                                          errorDescription:&err];
+    
+    NSNumber *data = [temp objectForKey:@"Last"];  
+    
+    return [data shortValue];
+    
+} // readLast
+
+// ----------------------------------------------------
+-(short) readGreatest{
+    
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                    NSUserDomainMask, YES) objectAtIndex:0];
+    
+    dataPath = [rootPath stringByAppendingPathComponent:STATSDATA_FILE];
+
+    
+   /* if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
+        dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
+        
+    } */   
     NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
     NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
                                           propertyListFromData:plistXML
@@ -99,30 +125,7 @@
 } // readGreatest
 
 
--(short) readLast{
-    
-    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                    NSUserDomainMask, YES) objectAtIndex:0];
-    
-    dataPath = [rootPath stringByAppendingPathComponent:@"StatsData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath]) {
-        dataPath = [[NSBundle mainBundle] pathForResource:@"StatsData" ofType:@"plist"];
-        
-    }    
-    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:dataPath];
-    NSDictionary *temp = (NSDictionary *)[NSPropertyListSerialization
-                                          propertyListFromData:plistXML
-                                          mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                          format:&format
-                                          errorDescription:&err];
-    
-    NSNumber *data = [temp objectForKey:@"Last"];  
-    
-    return [data shortValue];
-    
-} // readLast
-
+// ----------------------------------------------------
 -(void) writeLast:(short) last{
    
     rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -132,10 +135,9 @@
     
     
     // serialize and write to statsData file
-    dataPath = [rootPath stringByAppendingPathComponent:STATSDATA_FILE];
-    NSDictionary *plistDict = [NSDictionary dictionaryWithObject:
-                               [NSNumber numberWithInt:last]
-                                                          forKey:@"Last"];
+    NSDictionary *plistDict = [NSDictionary dictionaryWithObjects:                                
+                               [NSArray arrayWithObjects:[NSNumber numberWithInt:last],[NSNumber numberWithInt: [self readGreatest]] , nil]                                                         
+                                        forKeys:[NSArray arrayWithObjects:@"Last", @"Greatest", nil] ];
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:plistDict
                                                                    format:NSPropertyListXMLFormat_v1_0
                                                          errorDescription:&err];
@@ -148,6 +150,7 @@
     
 } // writeLast
 
+// ----------------------------------------------------
 -(void) writeGreatest:(short) great{
     
     rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -155,12 +158,10 @@
     
     dataPath = [rootPath stringByAppendingPathComponent:STATSDATA_FILE];
     
-    
     // serialize and write to statsData file
-    dataPath = [rootPath stringByAppendingPathComponent:STATSDATA_FILE];
-    NSDictionary *plistDict = [NSDictionary dictionaryWithObject:
-                               [NSNumber numberWithInt:great]
-                                                          forKey:@"Greatest"];
+    NSDictionary *plistDict = [NSDictionary dictionaryWithObjects:                                
+                                [NSArray arrayWithObjects:[NSNumber numberWithInt:[self readLast]],[NSNumber numberWithInt: great] , nil]                                                         
+                                               forKeys:[NSArray arrayWithObjects:@"Last", @"Greatest", nil] ];
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:plistDict
                                                                    format:NSPropertyListXMLFormat_v1_0
                                                          errorDescription:&err];

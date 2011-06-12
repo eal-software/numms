@@ -43,13 +43,18 @@
                                              withExtension:@"aif"];      
         AudioServicesCreateSystemSoundID( (CFURLRef) toneURLRef,&place_tone);
         
-        // chace place
+        // cache place
         toneFilename = [NSString stringWithString:@"level"];
         toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
                                              withExtension:@"aif"];      
         AudioServicesCreateSystemSoundID( (CFURLRef) toneURLRef,&level_tone);
-
-
+        
+        
+        // cache gameover
+        toneFilename = [NSString stringWithString:@"gameover"];
+        toneURLRef = [[NSBundle mainBundle] URLForResource:toneFilename
+                                             withExtension:@"aif"];      
+        AudioServicesCreateSystemSoundID( (CFURLRef) toneURLRef,&gameover_tone);
 
 
     }
@@ -80,6 +85,10 @@
 -(void) playLevel{
     AudioServicesPlaySystemSound(level_tone);
 } // end playLevel
+
+-(void) playGameover{
+    AudioServicesPlaySystemSound(gameover_tone);
+} // end playGameover
 
 
 @end

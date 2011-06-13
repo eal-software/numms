@@ -112,7 +112,7 @@
     ccColor3B scoreColer;
     
     
-    if (scoreDist > 1) { // have reached the goal
+    if (scoreDist >= 1) { // have reached the goal
 
         barLoc = ccp(0,PBAR_Y);
         scoreColer = ccc3(74, 148, 52);

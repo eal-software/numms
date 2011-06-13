@@ -94,7 +94,11 @@
     
     NSNumber *data = [temp objectForKey:@"Last"];  
     
-    return [data shortValue];
+    if (data == NULL) {
+        return 0;
+    }else{
+        return [data shortValue];
+    }
     
 } // readLast
 
@@ -120,7 +124,11 @@
     
     NSNumber *data = [temp objectForKey:@"Greatest"];  
     
-    return [data integerValue];
+    if (data == NULL) {
+        return 0;
+    }else{
+        return [data shortValue];
+    }
     
 } // readGreatest
 

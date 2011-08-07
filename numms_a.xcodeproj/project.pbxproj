@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180E60F913EF08E4008B41BA /* background_rules-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 180E60F713EF08E4008B41BA /* background_rules-hd.png */; };
+		180E60FA13EF08E4008B41BA /* background_rules.png in Resources */ = {isa = PBXBuildFile; fileRef = 180E60F813EF08E4008B41BA /* background_rules.png */; };
 		180F0C51138F0ACE007AA2C6 /* DataMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 180F0C4F138F0ACE007AA2C6 /* DataMatrix.cpp */; };
 		180F0C54138F25D8007AA2C6 /* Piece.mm in Sources */ = {isa = PBXBuildFile; fileRef = 180F0C53138F25D8007AA2C6 /* Piece.mm */; };
 		1811291013A5185700A01F7D /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 1811290B13A5185700A01F7D /* iTunesArtwork */; };
@@ -160,11 +162,11 @@
 		18BBF3931391E67500BBDAEE /* Hud.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF3921391E67500BBDAEE /* Hud.mm */; };
 		18F560E81396A568005AB5AB /* GameScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F560E71396A568005AB5AB /* GameScene.mm */; };
 		18FBFCA31396917A00243167 /* FadeTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBFCA21396917A00243167 /* FadeTextButton.m */; };
-		18FC019C13A82ED600F1F0CB /* background_rules-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FC019A13A82ED600F1F0CB /* background_rules-hd.png */; };
-		18FC019D13A82ED600F1F0CB /* background_rules.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FC019B13A82ED600F1F0CB /* background_rules.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		180E60F713EF08E4008B41BA /* background_rules-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background_rules-hd.png"; sourceTree = "<group>"; };
+		180E60F813EF08E4008B41BA /* background_rules.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_rules.png; sourceTree = "<group>"; };
 		180F0C48138F0283007AA2C6 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		180F0C4F138F0ACE007AA2C6 /* DataMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMatrix.cpp; sourceTree = "<group>"; };
 		180F0C50138F0ACE007AA2C6 /* DataMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrix.h; sourceTree = "<group>"; };
@@ -446,8 +448,6 @@
 		18F560E71396A568005AB5AB /* GameScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameScene.mm; sourceTree = "<group>"; };
 		18FBFCA11396917A00243167 /* FadeTextButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTextButton.h; sourceTree = "<group>"; };
 		18FBFCA21396917A00243167 /* FadeTextButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTextButton.m; sourceTree = "<group>"; };
-		18FC019A13A82ED600F1F0CB /* background_rules-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background_rules-hd.png"; sourceTree = "<group>"; };
-		18FC019B13A82ED600F1F0CB /* background_rules.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_rules.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -840,8 +840,8 @@
 		18AFE8B8139662DD00E81B80 /* sprites&fonts */ = {
 			isa = PBXGroup;
 			children = (
-				18FC019A13A82ED600F1F0CB /* background_rules-hd.png */,
-				18FC019B13A82ED600F1F0CB /* background_rules.png */,
+				180E60F713EF08E4008B41BA /* background_rules-hd.png */,
+				180E60F813EF08E4008B41BA /* background_rules.png */,
 				1852BD0513A579A800857EC8 /* background_hello-hd.png */,
 				1852BD0613A579A800857EC8 /* background_hello.png */,
 				189EEB5513A4219000CA7E34 /* ArnoPro-New.otf */,
@@ -984,8 +984,8 @@
 				1852BD0813A579A800857EC8 /* background_hello.png in Resources */,
 				1852BD0F13A57C7100857EC8 /* Default.png in Resources */,
 				1852BD1113A57C7C00857EC8 /* Default@2x.png in Resources */,
-				18FC019C13A82ED600F1F0CB /* background_rules-hd.png in Resources */,
-				18FC019D13A82ED600F1F0CB /* background_rules.png in Resources */,
+				180E60F913EF08E4008B41BA /* background_rules-hd.png in Resources */,
+				180E60FA13EF08E4008B41BA /* background_rules.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
